@@ -1,0 +1,99 @@
+import { Category } from '@/types/finance';
+
+export const defaultCategories: Category[] = [
+  // Expense Categories
+  {
+    id: 'food',
+    name: 'Food & Dining',
+    type: 'expense',
+    color: '#f59e0b',
+    budgetLimit: 400,
+    icon: 'utensils'
+  },
+  {
+    id: 'rent',
+    name: 'Rent & Housing',
+    type: 'expense',
+    color: '#ef4444',
+    budgetLimit: 1200,
+    icon: 'home'
+  },
+  {
+    id: 'transport',
+    name: 'Transportation',
+    type: 'expense',
+    color: '#8b5cf6',
+    budgetLimit: 200,
+    icon: 'car'
+  },
+  {
+    id: 'entertainment',
+    name: 'Entertainment',
+    type: 'expense',
+    color: '#06b6d4',
+    budgetLimit: 150,
+    icon: 'music'
+  },
+  {
+    id: 'shopping',
+    name: 'Shopping',
+    type: 'expense',
+    color: '#ec4899',
+    budgetLimit: 300,
+    icon: 'shopping-bag'
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare',
+    type: 'expense',
+    color: '#10b981',
+    budgetLimit: 200,
+    icon: 'heart'
+  },
+  {
+    id: 'utilities',
+    name: 'Utilities',
+    type: 'expense',
+    color: '#f97316',
+    budgetLimit: 150,
+    icon: 'zap'
+  },
+  {
+    id: 'subscriptions',
+    name: 'Subscriptions',
+    type: 'expense',
+    color: '#6366f1',
+    budgetLimit: 50,
+    icon: 'calendar'
+  },
+  
+  // Income Categories
+  {
+    id: 'salary',
+    name: 'Salary',
+    type: 'income',
+    color: '#059669',
+    icon: 'briefcase'
+  },
+  {
+    id: 'freelance',
+    name: 'Freelance',
+    type: 'income',
+    color: '#0891b2',
+    icon: 'laptop'
+  },
+  {
+    id: 'investments',
+    name: 'Investments',
+    type: 'income',
+    color: '#7c3aed',
+    icon: 'trending-up'
+  },
+  {
+    id: 'other-income',
+    name: 'Other Income',
+    type: 'income',
+    color: '#16a34a',
+    icon: 'plus'
+  }
+];
