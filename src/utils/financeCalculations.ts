@@ -67,7 +67,7 @@ export const getFinancialSummary = (
     totalIncome,
     totalExpenses,
     balance,
-    currency: transactions[0]?.currency || 'USD',
+    currency: 'BRL', // Always BRL since we convert everything
     period: period === 'monthly' ? 'This Month' : 'This Year',
     savingsRate,
     topCategories

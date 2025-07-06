@@ -34,7 +34,7 @@ export const TransactionForm = ({
 
   const availableCategories = defaultCategories.filter(cat => cat.type === type);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!amount || !category || !description) {
@@ -46,16 +46,44 @@ export const TransactionForm = ({
       return;
     }
 
+    const originalAmount = parseFloat(amount);
+    let convertedAmount = originalAmount;
+    let exchangeRate = 1;
+
+    // Convert to BRL if currency is not BRL
+    if (currency !== 'BRL') {
+      try {
+        const { convertToBRL } = await import('@/utils/currencyService');
+        const conversion = await convertToBRL(originalAmount, currency);
+        convertedAmount = conversion.convertedAmount;
+        exchangeRate = conversion.exchangeRate;
+        
+        toast({
+          title: 'Currency Converted',
+          description: `${originalAmount} ${currency} = ${convertedAmount.toFixed(2)} BRL (Rate: ${exchangeRate.toFixed(4)})`,
+        });
+      } catch (error) {
+        toast({
+          title: 'Conversion Error',
+          description: 'Using fallback exchange rate',
+          variant: 'destructive'
+        });
+      }
+    }
+
     const transaction: Omit<Transaction, 'id'> = {
       type,
-      amount: parseFloat(amount),
+      amount: convertedAmount, // Amount in BRL
+      originalAmount,
       category,
       description,
       date: new Date().toISOString(),
       isRecurring,
       recurringFrequency: isRecurring ? recurringFrequency : undefined,
       isFixed,
-      currency,
+      currency: 'BRL', // Always BRL for calculations
+      originalCurrency: currency,
+      exchangeRate: currency !== 'BRL' ? exchangeRate : undefined,
       wallet
     };
 
@@ -70,10 +98,10 @@ export const TransactionForm = ({
     
     toast({
       title: 'Transaction Added',
-      description: `${type === 'income' ? 'Income' : 'Expense'} of ${new Intl.NumberFormat('en-US', {
+      description: `${type === 'income' ? 'Income' : 'Expense'} of ${new Intl.NumberFormat('pt-BR', {
         style: 'currency',
-        currency
-      }).format(parseFloat(amount))} has been recorded.`,
+        currency: 'BRL'
+      }).format(convertedAmount)} has been recorded.`,
     });
   };
 

@@ -2,6 +2,7 @@ export interface Transaction {
   id: string;
   type: 'income' | 'expense';
   amount: number;
+  originalAmount: number;
   category: string;
   description: string;
   date: string;
@@ -9,6 +10,8 @@ export interface Transaction {
   recurringFrequency?: 'daily' | 'weekly' | 'monthly' | 'yearly';
   isFixed: boolean;
   currency: string;
+  originalCurrency: string;
+  exchangeRate?: number;
   wallet?: string;
 }
 

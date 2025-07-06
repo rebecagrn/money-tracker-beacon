@@ -151,17 +151,25 @@ export const TransactionList = ({ transactions, onDeleteTransaction }: Transacti
                         className="w-3 h-3 rounded-full" 
                         style={{ backgroundColor: categoryInfo.color }}
                       />
-                      <span className="text-sm text-muted-foreground">
-                        {categoryInfo.name}
+                  <span className="text-sm text-muted-foreground">
+                    {categoryInfo.name}
+                  </span>
+                  {transaction.originalCurrency && transaction.originalCurrency !== 'BRL' && (
+                    <>
+                      <span className="text-muted-foreground">•</span>
+                      <span className="text-xs text-muted-foreground">
+                        {transaction.originalAmount.toFixed(2)} {transaction.originalCurrency}
                       </span>
-                      {transaction.wallet && (
-                        <>
-                          <span className="text-muted-foreground">•</span>
-                          <span className="text-sm text-muted-foreground">
-                            {transaction.wallet}
-                          </span>
-                        </>
-                      )}
+                    </>
+                  )}
+                  {transaction.wallet && (
+                    <>
+                      <span className="text-muted-foreground">•</span>
+                      <span className="text-sm text-muted-foreground">
+                        {transaction.wallet}
+                      </span>
+                    </>
+                  )}
                     </div>
                   </div>
                 </div>
@@ -170,7 +178,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction }: Transacti
                   <p className={`font-semibold ${
                     isIncome ? 'text-success' : 'text-warning'
                   }`}>
-                    {isIncome ? '+' : '-'}{formatCurrency(transaction.amount, transaction.currency)}
+                    {isIncome ? '+' : '-'}{formatCurrency(transaction.amount, 'BRL')}
                   </p>
                   <div className="flex items-center gap-2 mt-1">
                     <Calendar className="w-3 h-3 text-muted-foreground" />
