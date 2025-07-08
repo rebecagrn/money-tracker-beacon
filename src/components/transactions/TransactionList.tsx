@@ -19,6 +19,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction }: Transacti
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
   const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
+  const [filterPeriod, setFilterPeriod] = useState<'all' | 'week' | 'month' | 'year'>('all');
 
   // Filter and sort transactions
   const filteredTransactions = transactions
@@ -28,7 +29,24 @@ export const TransactionList = ({ transactions, onDeleteTransaction }: Transacti
       const matchesCategory = filterCategory === 'all' || transaction.category === filterCategory;
       const matchesType = filterType === 'all' || transaction.type === filterType;
       
-      return matchesSearch && matchesCategory && matchesType;
+      // Period filter
+      const transactionDate = new Date(transaction.date);
+      const now = new Date();
+      let matchesPeriod = true;
+      
+      if (filterPeriod === 'week') {
+        const weekAgo = new Date(now);
+        weekAgo.setDate(now.getDate() - 7);
+        matchesPeriod = transactionDate >= weekAgo;
+      } else if (filterPeriod === 'month') {
+        const monthAgo = new Date(now.getFullYear(), now.getMonth(), 1);
+        matchesPeriod = transactionDate >= monthAgo;
+      } else if (filterPeriod === 'year') {
+        const yearAgo = new Date(now.getFullYear(), 0, 1);
+        matchesPeriod = transactionDate >= yearAgo;
+      }
+      
+      return matchesSearch && matchesCategory && matchesType && matchesPeriod;
     })
     .sort((a, b) => {
       if (sortBy === 'date') {
@@ -63,7 +81,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction }: Transacti
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -102,6 +120,18 @@ export const TransactionList = ({ transactions, onDeleteTransaction }: Transacti
                 </div>
               </SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={filterPeriod} onValueChange={(value) => setFilterPeriod(value as 'all' | 'week' | 'month' | 'year')}>
+          <SelectTrigger>
+            <SelectValue placeholder="Filter by period" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Time</SelectItem>
+            <SelectItem value="week">This Week</SelectItem>
+            <SelectItem value="month">This Month</SelectItem>
+            <SelectItem value="year">This Year</SelectItem>
           </SelectContent>
         </Select>
 

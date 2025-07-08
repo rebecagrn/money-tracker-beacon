@@ -3,11 +3,14 @@ import { FinancialOverview } from './FinancialOverview';
 import { TransactionForm } from '../transactions/TransactionForm';
 import { TransactionList } from '../transactions/TransactionList';
 import { SpendingChart } from '../charts/SpendingChart';
+import { BillImporter } from '../bills/BillImporter';
+import { BalanceForecast } from '../forecast/BalanceForecast';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { PieChart, BarChart, Calculator, Download, Settings } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PieChart, BarChart, Calculator, Download, Upload, TrendingUp } from 'lucide-react';
 import { Transaction } from '@/types/finance';
 import { getFinancialSummary, calculateNetIncome, formatCurrency } from '@/utils/financeCalculations';
 import { defaultCategories } from '@/data/defaultCategories';
@@ -41,6 +44,14 @@ export const Dashboard = () => {
     };
     setTransactions(prev => [transaction, ...prev]);
     setShowForm(false);
+  };
+
+  const importTransactions = (importedTransactions: Transaction[]) => {
+    setTransactions(prev => [...importedTransactions, ...prev]);
+    toast({
+      title: 'Transactions Imported',
+      description: `${importedTransactions.length} transactions have been added.`,
+    });
   };
 
   const deleteTransaction = (id: string) => {
@@ -166,54 +177,78 @@ export const Dashboard = () => {
           </div>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Transaction Form */}
-          {showForm && (
-            <div className="animate-fade-in">
-              <TransactionForm onAddTransaction={addTransaction} />
-            </div>
-          )}
+        {/* Main Content Tabs */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="transactions">Transactions</TabsTrigger>
+            <TabsTrigger value="import">Import Bills</TabsTrigger>
+            <TabsTrigger value="forecast">Forecast</TabsTrigger>
+          </TabsList>
 
-          {/* Spending Chart */}
-          <div className={showForm ? '' : 'lg:col-span-2'}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">Spending Analysis</h3>
-              <div className="flex gap-2">
-                <Button
-                  variant={chartType === 'pie' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setChartType('pie')}
-                  className="gap-2"
-                >
-                  <PieChart className="w-4 h-4" />
-                  Pie
-                </Button>
-                <Button
-                  variant={chartType === 'bar' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setChartType('bar')}
-                  className="gap-2"
-                >
-                  <BarChart className="w-4 h-4" />
-                  Bar
-                </Button>
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Transaction Form */}
+              {showForm && (
+                <div className="animate-fade-in">
+                  <TransactionForm onAddTransaction={addTransaction} />
+                </div>
+              )}
+
+              {/* Spending Chart */}
+              <div className={showForm ? '' : 'lg:col-span-2'}>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold">Spending Analysis</h3>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={chartType === 'pie' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setChartType('pie')}
+                      className="gap-2"
+                    >
+                      <PieChart className="w-4 h-4" />
+                      Pie
+                    </Button>
+                    <Button
+                      variant={chartType === 'bar' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setChartType('bar')}
+                      className="gap-2"
+                    >
+                      <BarChart className="w-4 h-4" />
+                      Bar
+                    </Button>
+                  </div>
+                </div>
+                
+                <SpendingChart
+                  data={chartData}
+                  title="Spending by Category"
+                  type={chartType}
+                  currency={summary.currency}
+                />
               </div>
             </div>
-            
-            <SpendingChart
-              data={chartData}
-              title="Spending by Category"
-              type={chartType}
-              currency={summary.currency}
-            />
-          </div>
-        </div>
+          </TabsContent>
 
-        {/* Transaction List */}
-        <TransactionList 
-          transactions={transactions} 
-          onDeleteTransaction={deleteTransaction}
-        />
+          <TabsContent value="transactions">
+            <TransactionList 
+              transactions={transactions} 
+              onDeleteTransaction={deleteTransaction}
+            />
+          </TabsContent>
+
+          <TabsContent value="import">
+            <BillImporter onImportTransactions={importTransactions} />
+          </TabsContent>
+
+          <TabsContent value="forecast">
+            <BalanceForecast 
+              transactions={transactions}
+              currentBalance={summary.balance}
+            />
+          </TabsContent>
+        </Tabs>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
