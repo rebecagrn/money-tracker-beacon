@@ -12,24 +12,30 @@ import { useToast } from '@/hooks/use-toast';
 
 interface TransactionFormProps {
   onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void;
+  onEditTransaction?: (transaction: Transaction) => void;
+  editingTransaction?: Transaction;
   defaultCurrency?: string;
   wallets?: string[];
 }
 
 export const TransactionForm = ({ 
-  onAddTransaction, 
+  onAddTransaction,
+  onEditTransaction,
+  editingTransaction,
   defaultCurrency = 'USD',
   wallets = ['Main Wallet']
 }: TransactionFormProps) => {
-  const [type, setType] = useState<'income' | 'expense'>('expense');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
-  const [isRecurring, setIsRecurring] = useState(false);
-  const [recurringFrequency, setRecurringFrequency] = useState<'monthly' | 'weekly' | 'yearly'>('monthly');
-  const [isFixed, setIsFixed] = useState(false);
-  const [currency, setCurrency] = useState(defaultCurrency);
-  const [wallet, setWallet] = useState(wallets[0]);
+  const [type, setType] = useState<'income' | 'expense'>(editingTransaction?.type || 'expense');
+  const [amount, setAmount] = useState(editingTransaction?.originalAmount?.toString() || '');
+  const [category, setCategory] = useState(editingTransaction?.category || '');
+  const [description, setDescription] = useState(editingTransaction?.description || '');
+  const [isRecurring, setIsRecurring] = useState(editingTransaction?.isRecurring || false);
+  const [recurringFrequency, setRecurringFrequency] = useState<'monthly' | 'weekly' | 'yearly'>(
+    (editingTransaction?.recurringFrequency && editingTransaction.recurringFrequency !== 'daily' ? editingTransaction.recurringFrequency : 'monthly')
+  );
+  const [isFixed, setIsFixed] = useState(editingTransaction?.isFixed || false);
+  const [currency, setCurrency] = useState(editingTransaction?.originalCurrency || defaultCurrency);
+  const [wallet, setWallet] = useState(editingTransaction?.wallet || wallets[0]);
   const { toast } = useToast();
 
   const availableCategories = defaultCategories.filter(cat => cat.type === type);
@@ -37,10 +43,10 @@ export const TransactionForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !category || !description) {
+    if (!amount || !category) {
       toast({
         title: 'Missing Information',
-        description: 'Please fill in all required fields.',
+        description: 'Please fill in amount and category.',
         variant: 'destructive'
       });
       return;
@@ -71,13 +77,13 @@ export const TransactionForm = ({
       }
     }
 
-    const transaction: Omit<Transaction, 'id'> = {
+    const transactionData = {
       type,
       amount: convertedAmount, // Amount in BRL
       originalAmount,
       category,
       description,
-      date: new Date().toISOString(),
+      date: editingTransaction?.date || new Date().toISOString(),
       isRecurring,
       recurringFrequency: isRecurring ? recurringFrequency : undefined,
       isFixed,
@@ -87,7 +93,11 @@ export const TransactionForm = ({
       wallet
     };
 
-    onAddTransaction(transaction);
+    if (editingTransaction && onEditTransaction) {
+      onEditTransaction({ ...transactionData, id: editingTransaction.id });
+    } else {
+      onAddTransaction(transactionData);
+    }
     
     // Reset form
     setAmount('');
@@ -97,11 +107,11 @@ export const TransactionForm = ({
     setIsFixed(false);
     
     toast({
-      title: 'Transaction Added',
+      title: editingTransaction ? 'Transaction Updated' : 'Transaction Added',
       description: `${type === 'income' ? 'Income' : 'Expense'} of ${new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL'
-      }).format(convertedAmount)} has been recorded.`,
+      }).format(convertedAmount)} has been ${editingTransaction ? 'updated' : 'recorded'}.`,
     });
   };
 
@@ -111,7 +121,9 @@ export const TransactionForm = ({
         <div className="w-10 h-10 finance-gradient rounded-xl flex items-center justify-center">
           <Plus className="w-5 h-5 text-white" />
         </div>
-        <h3 className="text-xl font-semibold">Add Transaction</h3>
+        <h3 className="text-xl font-semibold">
+          {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
+        </h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -263,7 +275,7 @@ export const TransactionForm = ({
         </div>
 
         <Button type="submit" className="w-full finance-gradient">
-          Add Transaction
+          {editingTransaction ? 'Update Transaction' : 'Add Transaction'}
         </Button>
       </form>
     </Card>

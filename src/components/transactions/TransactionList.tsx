@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowUp, ArrowDown, Calendar, Search, Filter } from 'lucide-react';
+import { ArrowUp, ArrowDown, Calendar, Search, Filter, Edit2, Trash2 } from 'lucide-react';
 import { Transaction } from '@/types/finance';
 import { defaultCategories } from '@/data/defaultCategories';
 import { formatCurrency } from '@/utils/financeCalculations';
@@ -12,9 +12,10 @@ import { formatCurrency } from '@/utils/financeCalculations';
 interface TransactionListProps {
   transactions: Transaction[];
   onDeleteTransaction?: (id: string) => void;
+  onEditTransaction?: (transaction: Transaction) => void;
 }
 
-export const TransactionList = ({ transactions, onDeleteTransaction }: TransactionListProps) => {
+export const TransactionList = ({ transactions, onDeleteTransaction, onEditTransaction }: TransactionListProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
@@ -228,16 +229,28 @@ export const TransactionList = ({ transactions, onDeleteTransaction }: Transacti
                   </div>
                 </div>
 
-                {onDeleteTransaction && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onDeleteTransaction(transaction.id)}
-                    className="ml-4 text-danger hover:text-danger"
-                  >
-                    Delete
-                  </Button>
-                )}
+                <div className="flex gap-2 ml-4">
+                  {onEditTransaction && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onEditTransaction(transaction)}
+                      className="text-primary hover:text-primary"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                  {onDeleteTransaction && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onDeleteTransaction(transaction.id)}
+                      className="text-danger hover:text-danger"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
               </div>
             );
           })
