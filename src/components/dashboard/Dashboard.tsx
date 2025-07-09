@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FinancialOverview } from './FinancialOverview';
 import { TransactionForm } from '../transactions/TransactionForm';
 import { TransactionList } from '../transactions/TransactionList';
+import { TransactionEditModal } from '../transactions/TransactionEditModal';
 import { SpendingChart } from '../charts/SpendingChart';
 import { BillImporter } from '../bills/BillImporter';
 import { BalanceForecast } from '../forecast/BalanceForecast';
@@ -19,7 +20,8 @@ import { useToast } from '@/hooks/use-toast';
 export const Dashboard = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [editingTransaction, setEditingTransaction] = useState<Transaction | undefined>();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [chartType, setChartType] = useState<'pie' | 'bar'>('pie');
   const [grossIncome, setGrossIncome] = useState('');
   const [taxRate, setTaxRate] = useState(6);
@@ -45,15 +47,12 @@ export const Dashboard = () => {
     };
     setTransactions(prev => [transaction, ...prev]);
     setShowForm(false);
-    setEditingTransaction(undefined);
   };
 
   const editTransaction = (updatedTransaction: Transaction) => {
     setTransactions(prev => 
       prev.map(t => t.id === updatedTransaction.id ? updatedTransaction : t)
     );
-    setShowForm(false);
-    setEditingTransaction(undefined);
     toast({
       title: 'Transaction Updated',
       description: 'The transaction has been successfully updated.',
@@ -62,7 +61,12 @@ export const Dashboard = () => {
 
   const handleEditClick = (transaction: Transaction) => {
     setEditingTransaction(transaction);
-    setShowForm(true);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingTransaction(null);
   };
 
   const importTransactions = (importedTransactions: Transaction[]) => {
@@ -140,10 +144,7 @@ export const Dashboard = () => {
               Export CSV
             </Button>
             <Button
-              onClick={() => {
-                setShowForm(!showForm);
-                if (!showForm) setEditingTransaction(undefined);
-              }}
+              onClick={() => setShowForm(!showForm)}
               className="finance-gradient gap-2"
             >
               {showForm ? 'Close Form' : 'Add Transaction'}
@@ -215,8 +216,6 @@ export const Dashboard = () => {
                 <div className="animate-fade-in">
                   <TransactionForm 
                     onAddTransaction={addTransaction}
-                    onEditTransaction={editTransaction}
-                    editingTransaction={editingTransaction}
                   />
                 </div>
               )}
@@ -302,7 +301,16 @@ export const Dashboard = () => {
             <p className="text-sm text-muted-foreground">Savings Rate</p>
           </Card>
         </div>
+        </div>
+
+        {/* Transaction Edit Modal */}
+        <TransactionEditModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          transaction={editingTransaction}
+          onEditTransaction={editTransaction}
+          onAddTransaction={addTransaction}
+        />
       </div>
-    </div>
-  );
-};
+    );
+  };
