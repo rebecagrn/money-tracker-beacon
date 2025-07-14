@@ -1,14 +1,14 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { 
-  Home, 
-  Target, 
-  TrendingUp, 
-  FileText, 
+import {
+  Home,
+  Target,
+  TrendingUp,
+  FileText,
   Calculator,
   BarChart3,
   Upload,
   CreditCard,
-  PieChart
+  PieChart,
 } from "lucide-react";
 
 import {
@@ -44,14 +44,15 @@ export function AppSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const searchParams = new URLSearchParams(location.search);
-  const currentTab = searchParams.get('tab');
-  const currentSection = searchParams.get('section');
-  
+  const currentTab = searchParams.get("tab");
+  const currentSection = searchParams.get("section");
+
   // For now, we'll assume sidebar is not collapsed. Can be enhanced later with state management
   const collapsed = false;
 
   const isActive = (path: string) => {
-    if (path === "/") return currentPath === "/" && !currentTab && !currentSection;
+    if (path === "/")
+      return currentPath === "/" && !currentTab && !currentSection;
     if (path.includes("tab=")) {
       const tabMatch = path.match(/tab=([^&]*)/);
       return currentPath === "/" && currentTab === tabMatch?.[1];
@@ -63,8 +64,10 @@ export function AppSidebar() {
     return currentPath === path;
   };
 
-  const getNavClass = (path: string) => 
-    isActive(path) ? "bg-sidebar-accent text-sidebar-primary font-medium" : "hover:bg-sidebar-accent/50";
+  const getNavClass = (path: string) =>
+    isActive(path)
+      ? "bg-sidebar-accent text-sidebar-primary font-medium"
+      : "hover:bg-sidebar-accent/50";
 
   return (
     <Sidebar className={collapsed ? "w-16" : "w-64"} collapsible="icon">
@@ -75,7 +78,9 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div>
-              <h2 className="text-lg font-bold text-sidebar-foreground">FinanceTracker</h2>
+              <h2 className="text-lg font-bold text-sidebar-foreground">
+                MyFinances
+              </h2>
               <p className="text-xs text-muted-foreground">Personal Finance</p>
             </div>
           )}
@@ -110,7 +115,10 @@ export function AppSidebar() {
                   {dashboardItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
-                        <NavLink to={item.url} className={getNavClass(item.url)}>
+                        <NavLink
+                          to={item.url}
+                          className={getNavClass(item.url)}
+                        >
                           <item.icon className="w-4 h-4" />
                           {!collapsed && <span>{item.title}</span>}
                         </NavLink>
@@ -128,7 +136,10 @@ export function AppSidebar() {
                   {toolsItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
-                        <NavLink to={item.url} className={getNavClass(item.url)}>
+                        <NavLink
+                          to={item.url}
+                          className={getNavClass(item.url)}
+                        >
                           <item.icon className="w-4 h-4" />
                           {!collapsed && <span>{item.title}</span>}
                         </NavLink>

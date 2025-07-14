@@ -1,6 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Home, Target, Settings } from 'lucide-react';
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Home, Target, Settings } from "lucide-react";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -11,11 +11,11 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-8">
-            <h1 className="text-xl font-bold text-primary">FinanceTracker</h1>
+            <h1 className="text-xl font-bold text-primary">MyFinances</h1>
             <div className="flex space-x-4">
               <Button
                 asChild
-                variant={isActive('/') ? 'default' : 'ghost'}
+                variant={isActive("/") ? "default" : "ghost"}
                 className="gap-2"
               >
                 <Link to="/">
@@ -25,7 +25,7 @@ export const Navbar = () => {
               </Button>
               <Button
                 asChild
-                variant={isActive('/goals') ? 'default' : 'ghost'}
+                variant={isActive("/goals") ? "default" : "ghost"}
                 className="gap-2"
               >
                 <Link to="/goals">
