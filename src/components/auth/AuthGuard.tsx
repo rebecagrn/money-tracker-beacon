@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
-import { Shield } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { Shield } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -11,60 +11,48 @@ interface AuthGuardProps {
 
 export const AuthGuard = ({ children }: AuthGuardProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     // Check if user is already authenticated
-    const auth = localStorage.getItem('finance-auth');
-    if (auth === 'authenticated') {
+    const auth = localStorage.getItem("finance-auth");
+    if (auth === "authenticated") {
       setIsAuthenticated(true);
     }
   }, []);
 
   const handleLogin = async () => {
     setLoading(true);
-    
+
     // Simple password check - you can enhance this with proper encryption
-    if (password === 'finance123' || password.length >= 6) {
-      localStorage.setItem('finance-auth', 'authenticated');
+    if (password === "finance123" || password.length >= 6) {
+      localStorage.setItem("finance-auth", "authenticated");
       setIsAuthenticated(true);
       toast({
-        title: 'Welcome back!',
-        description: 'Successfully logged into your finance dashboard.',
+        title: "Welcome back!",
+        description: "Successfully logged into your finance dashboard.",
       });
     } else {
       toast({
-        title: 'Access denied',
-        description: 'Please enter a valid password (minimum 6 characters).',
-        variant: 'destructive',
+        title: "Access denied",
+        description: "Please enter a valid password (minimum 6 characters).",
+        variant: "destructive",
       });
     }
-    
+
     setLoading(false);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('finance-auth');
+    localStorage.removeItem("finance-auth");
     setIsAuthenticated(false);
-    setPassword('');
+    setPassword("");
   };
 
   if (isAuthenticated) {
-    return (
-      <div className="relative">
-        {children}
-        <Button
-          onClick={handleLogout}
-          variant="outline"
-          size="sm"
-          className="fixed top-4 right-4 z-50"
-        >
-          Logout
-        </Button>
-      </div>
-    );
+    return <div className="relative">{children}</div>;
   }
 
   return (
@@ -74,7 +62,9 @@ export const AuthGuard = ({ children }: AuthGuardProps) => {
           <div className="w-16 h-16 mx-auto mb-4 finance-gradient rounded-2xl flex items-center justify-center">
             <Shield className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Finance Control</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            Finance Control
+          </h1>
           <p className="text-muted-foreground">
             Secure access to your personal finance dashboard
           </p>
@@ -87,7 +77,7 @@ export const AuthGuard = ({ children }: AuthGuardProps) => {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+              onKeyPress={(e) => e.key === "Enter" && handleLogin()}
               className="w-full"
             />
             <p className="text-xs text-muted-foreground mt-2">
@@ -100,7 +90,7 @@ export const AuthGuard = ({ children }: AuthGuardProps) => {
             disabled={loading || password.length < 6}
             className="w-full finance-gradient"
           >
-            {loading ? 'Authenticating...' : 'Access Dashboard'}
+            {loading ? "Authenticating..." : "Access Dashboard"}
           </Button>
         </div>
       </Card>

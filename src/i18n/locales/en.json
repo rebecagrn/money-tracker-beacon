@@ -52,8 +52,8 @@
   },
   "common": {
     "language": "Language",
-    "portuguese": "Portuguese",
-    "english": "English",
+    "portuguese": "PT-BR",
+    "english": "EN",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
