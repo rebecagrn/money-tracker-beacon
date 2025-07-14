@@ -27,22 +27,35 @@ import {
 export function AppSidebar() {
   const { t } = useTranslation();
   const location = useLocation();
-  
+
   const mainItems = [
-    { title: t('navigation.dashboard'), url: "/", icon: Home },
-    { title: t('navigation.goals'), url: "/goals", icon: Target },
+    { title: t("navigation.dashboard"), url: "/", icon: Home },
+    { title: t("navigation.goals"), url: "/goals", icon: Target },
   ];
 
   const dashboardItems = [
-    { title: t('dashboard.overview'), url: "/?tab=overview", icon: BarChart3 },
-    { title: t('dashboard.transactions'), url: "/?tab=transactions", icon: FileText },
-    { title: t('dashboard.importBills'), url: "/?tab=import", icon: Upload },
-    { title: t('dashboard.forecast'), url: "/?tab=forecast", icon: TrendingUp },
+    { title: t("dashboard.overview"), url: "/?tab=overview", icon: BarChart3 },
+    {
+      title: t("dashboard.transactions"),
+      url: "/?tab=transactions",
+      icon: FileText,
+    },
+    { title: t("dashboard.budget"), url: "/?tab=budget", icon: BarChart3 },
+    { title: t("dashboard.importBills"), url: "/?tab=import", icon: Upload },
+    { title: t("dashboard.forecast"), url: "/?tab=forecast", icon: TrendingUp },
   ];
 
   const toolsItems = [
-    { title: t('dashboard.netIncome'), url: "/?section=calculator", icon: Calculator },
-    { title: t('dashboard.spendingAnalysis'), url: "/?section=chart", icon: PieChart },
+    {
+      title: t("dashboard.netIncome"),
+      url: "/?section=calculator",
+      icon: Calculator,
+    },
+    {
+      title: t("dashboard.spendingAnalysis"),
+      url: "/?section=chart",
+      icon: PieChart,
+    },
   ];
   const currentPath = location.pathname;
   const searchParams = new URLSearchParams(location.search);

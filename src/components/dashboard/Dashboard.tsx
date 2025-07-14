@@ -274,6 +274,15 @@ export const Dashboard = () => {
     );
   }
 
+  const handleAddTransactionClick = () => {
+    if (currentTab !== "overview") {
+      handleTabChange("overview");
+      setShowForm(true);
+    } else {
+      setShowForm((prev) => !prev);
+    }
+  };
+
   return (
     <div className="dashboard-bg min-h-full">
       <div className="p-6 space-y-6">
@@ -294,7 +303,7 @@ export const Dashboard = () => {
               Export
             </Button>
             <Button
-              onClick={() => setShowForm(!showForm)}
+              onClick={handleAddTransactionClick}
               className="finance-gradient gap-2"
             >
               <Plus className="w-4 h-4" />

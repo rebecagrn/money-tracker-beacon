@@ -1,54 +1,79 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { CurrencyInput } from '@/components/ui/currency-input';
-import { Card } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { ArrowUp, ArrowDown, Plus } from 'lucide-react';
-import { Transaction } from '@/types/finance';
-import { defaultCategories } from '@/data/defaultCategories';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { CurrencyInput } from "@/components/ui/currency-input";
+import { Card } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { ArrowUp, ArrowDown, Plus } from "lucide-react";
+import { Transaction } from "@/types/finance";
+import { defaultCategories } from "@/data/defaultCategories";
+import { useToast } from "@/hooks/use-toast";
 
 interface TransactionFormProps {
-  onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void;
+  onAddTransaction: (transaction: Omit<Transaction, "id">) => void;
   onEditTransaction?: (transaction: Transaction) => void;
   editingTransaction?: Transaction;
   defaultCurrency?: string;
   wallets?: string[];
 }
 
-export const TransactionForm = ({ 
+export const TransactionForm = ({
   onAddTransaction,
   onEditTransaction,
   editingTransaction,
-  defaultCurrency = 'USD',
-  wallets = ['Main Wallet']
+  defaultCurrency = "BRL",
+  wallets = ["Main Wallet"],
 }: TransactionFormProps) => {
-  const [type, setType] = useState<'income' | 'expense'>(editingTransaction?.type || 'expense');
-  const [amount, setAmount] = useState(editingTransaction?.originalAmount?.toString() || '');
-  const [category, setCategory] = useState(editingTransaction?.category || '');
-  const [description, setDescription] = useState(editingTransaction?.description || '');
-  const [isRecurring, setIsRecurring] = useState(editingTransaction?.isRecurring || false);
-  const [recurringFrequency, setRecurringFrequency] = useState<'monthly' | 'weekly' | 'yearly'>(
-    (editingTransaction?.recurringFrequency && editingTransaction.recurringFrequency !== 'daily' ? editingTransaction.recurringFrequency : 'monthly')
+  const [type, setType] = useState<"income" | "expense">(
+    editingTransaction?.type || "expense"
+  );
+  const [amount, setAmount] = useState(
+    editingTransaction?.originalAmount?.toString() || ""
+  );
+  const [category, setCategory] = useState(editingTransaction?.category || "");
+  const [description, setDescription] = useState(
+    editingTransaction?.description || ""
+  );
+  const [isRecurring, setIsRecurring] = useState(
+    editingTransaction?.isRecurring || false
+  );
+  const [recurringFrequency, setRecurringFrequency] = useState<
+    "monthly" | "weekly" | "yearly"
+  >(
+    editingTransaction?.recurringFrequency &&
+      editingTransaction.recurringFrequency !== "daily"
+      ? editingTransaction.recurringFrequency
+      : "monthly"
   );
   const [isFixed, setIsFixed] = useState(editingTransaction?.isFixed || false);
-  const [currency, setCurrency] = useState(editingTransaction?.originalCurrency || defaultCurrency);
-  const [wallet, setWallet] = useState(editingTransaction?.wallet || wallets[0]);
+  const [currency, setCurrency] = useState(
+    editingTransaction?.originalCurrency || defaultCurrency
+  );
+  const [wallet, setWallet] = useState(
+    editingTransaction?.wallet || wallets[0]
+  );
   const { toast } = useToast();
 
-  const availableCategories = defaultCategories.filter(cat => cat.type === type);
+  const availableCategories = defaultCategories.filter(
+    (cat) => cat.type === type
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!amount || !category) {
       toast({
-        title: 'Missing Information',
-        description: 'Please fill in amount and category.',
-        variant: 'destructive'
+        title: "Missing Information",
+        description: "Please fill in amount and category.",
+        variant: "destructive",
       });
       return;
     }
@@ -58,22 +83,24 @@ export const TransactionForm = ({
     let exchangeRate = 1;
 
     // Convert to BRL if currency is not BRL
-    if (currency !== 'BRL') {
+    if (currency !== "BRL") {
       try {
-        const { convertToBRL } = await import('@/utils/currencyService');
+        const { convertToBRL } = await import("@/utils/currencyService");
         const conversion = await convertToBRL(originalAmount, currency);
         convertedAmount = conversion.convertedAmount;
         exchangeRate = conversion.exchangeRate;
-        
+
         toast({
-          title: 'Currency Converted',
-          description: `${originalAmount} ${currency} = ${convertedAmount.toFixed(2)} BRL (Rate: ${exchangeRate.toFixed(4)})`,
+          title: "Currency Converted",
+          description: `${originalAmount} ${currency} = ${convertedAmount.toFixed(
+            2
+          )} BRL (Rate: ${exchangeRate.toFixed(4)})`,
         });
       } catch (error) {
         toast({
-          title: 'Conversion Error',
-          description: 'Using fallback exchange rate',
-          variant: 'destructive'
+          title: "Conversion Error",
+          description: "Using fallback exchange rate",
+          variant: "destructive",
         });
       }
     }
@@ -88,10 +115,10 @@ export const TransactionForm = ({
       isRecurring,
       recurringFrequency: isRecurring ? recurringFrequency : undefined,
       isFixed,
-      currency: 'BRL', // Always BRL for calculations
+      currency: "BRL", // Always BRL for calculations
       originalCurrency: currency,
-      exchangeRate: currency !== 'BRL' ? exchangeRate : undefined,
-      wallet
+      exchangeRate: currency !== "BRL" ? exchangeRate : undefined,
+      wallet,
     };
 
     if (editingTransaction && onEditTransaction) {
@@ -99,20 +126,24 @@ export const TransactionForm = ({
     } else {
       onAddTransaction(transactionData);
     }
-    
+
     // Reset form
-    setAmount('');
-    setCategory('');
-    setDescription('');
+    setAmount("");
+    setCategory("");
+    setDescription("");
     setIsRecurring(false);
     setIsFixed(false);
-    
+
     toast({
-      title: editingTransaction ? 'Transaction Updated' : 'Transaction Added',
-      description: `${type === 'income' ? 'Income' : 'Expense'} of ${new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      }).format(convertedAmount)} has been ${editingTransaction ? 'updated' : 'recorded'}.`,
+      title: editingTransaction ? "Transaction Updated" : "Transaction Added",
+      description: `${
+        type === "income" ? "Income" : "Expense"
+      } of ${new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(convertedAmount)} has been ${
+        editingTransaction ? "updated" : "recorded"
+      }.`,
     });
   };
 
@@ -123,7 +154,7 @@ export const TransactionForm = ({
           <Plus className="w-5 h-5 text-white" />
         </div>
         <h3 className="text-xl font-semibold">
-          {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
+          {editingTransaction ? "Edit Transaction" : "Add Transaction"}
         </h3>
       </div>
 
@@ -132,71 +163,80 @@ export const TransactionForm = ({
         <div className="flex gap-2">
           <Button
             type="button"
-            variant={type === 'expense' ? 'default' : 'outline'}
-            onClick={() => setType('expense')}
-            className={type === 'expense' ? 'bg-warning hover:bg-warning/90' : ''}
+            variant={type === "expense" ? "default" : "outline"}
+            onClick={() => setType("expense")}
+            className={
+              type === "expense" ? "bg-warning hover:bg-warning/90" : ""
+            }
           >
             <ArrowDown className="w-4 h-4 mr-2" />
             Expense
           </Button>
           <Button
             type="button"
-            variant={type === 'income' ? 'default' : 'outline'}
-            onClick={() => setType('income')}
-            className={type === 'income' ? 'success-gradient' : ''}
+            variant={type === "income" ? "default" : "outline"}
+            onClick={() => setType("income")}
+            className={type === "income" ? "success-gradient" : ""}
           >
             <ArrowUp className="w-4 h-4 mr-2" />
             Income
           </Button>
         </div>
 
-        {/* Amount */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Amount</label>
-          <div className="flex gap-2">
-            <Select value={currency} onValueChange={setCurrency}>
-              <SelectTrigger className="w-24">
-                <SelectValue />
+        <div className="flex flex-row gap-2">
+          {/* Amount */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Amount</label>
+            <div className="flex gap-2">
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger className="w-24">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="BRL">BRL</SelectItem>
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="GBP">GBP</SelectItem>
+                </SelectContent>
+              </Select>
+              <CurrencyInput
+                value={amount}
+                onChange={setAmount}
+                currency={currency}
+                locale={currency === "BRL" ? "pt-BR" : "en-US"}
+                className="flex-1"
+                placeholder="0,00"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              You can enter values like <b>1000</b>, <b>1,000.50</b>,{" "}
+              <b>1.000,50</b>, <b>R$ 1.000,00</b>, or <b>$1,000.00</b>. Both
+              dots and commas are supported. Currency symbols are not required.
+            </p>
+          </div>
+
+          {/* Category */}
+          <div className="space-y-2 w-full">
+            <label className="text-sm font-medium">Category</label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR">EUR</SelectItem>
-                <SelectItem value="GBP">GBP</SelectItem>
-                <SelectItem value="BRL">BRL</SelectItem>
+                {availableCategories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: cat.color }}
+                      />
+                      {cat.name}
+                    </div>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            <CurrencyInput
-              value={amount}
-              onChange={setAmount}
-              currency={currency}
-              locale={currency === 'BRL' ? 'pt-BR' : 'en-US'}
-              className="flex-1"
-              placeholder="0,00"
-            />
           </div>
-        </div>
-
-        {/* Category */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Category</label>
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {availableCategories.map((cat) => (
-                <SelectItem key={cat.id} value={cat.id}>
-                  <div className="flex items-center gap-2">
-                    <div 
-                      className="w-3 h-3 rounded-full" 
-                      style={{ backgroundColor: cat.color }}
-                    />
-                    {cat.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
 
         {/* Description */}
@@ -219,7 +259,9 @@ export const TransactionForm = ({
               </SelectTrigger>
               <SelectContent>
                 {wallets.map((w) => (
-                  <SelectItem key={w} value={w}>{w}</SelectItem>
+                  <SelectItem key={w} value={w}>
+                    {w}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -230,14 +272,23 @@ export const TransactionForm = ({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <label className="text-sm font-medium">Recurring Transaction</label>
-              <p className="text-xs text-muted-foreground">This transaction repeats automatically</p>
+              <label className="text-sm font-medium">
+                Recurring Transaction
+              </label>
+              <p className="text-xs text-muted-foreground">
+                This transaction repeats automatically
+              </p>
             </div>
             <Switch checked={isRecurring} onCheckedChange={setIsRecurring} />
           </div>
 
           {isRecurring && (
-            <Select value={recurringFrequency} onValueChange={(value) => setRecurringFrequency(value as 'monthly' | 'weekly' | 'yearly')}>
+            <Select
+              value={recurringFrequency}
+              onValueChange={(value) =>
+                setRecurringFrequency(value as "monthly" | "weekly" | "yearly")
+              }
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -251,9 +302,13 @@ export const TransactionForm = ({
 
           <div className="flex items-center justify-between">
             <div>
-              <label className="text-sm font-medium">Fixed {type === 'income' ? 'Income' : 'Expense'}</label>
+              <label className="text-sm font-medium">
+                Fixed {type === "income" ? "Income" : "Expense"}
+              </label>
               <p className="text-xs text-muted-foreground">
-                {type === 'income' ? 'Regular salary or fixed income' : 'Rent, subscriptions, fixed bills'}
+                {type === "income"
+                  ? "Regular salary or fixed income"
+                  : "Rent, subscriptions, fixed bills"}
               </p>
             </div>
             <Switch checked={isFixed} onCheckedChange={setIsFixed} />
@@ -275,7 +330,7 @@ export const TransactionForm = ({
         </div>
 
         <Button type="submit" className="w-full finance-gradient">
-          {editingTransaction ? 'Update Transaction' : 'Add Transaction'}
+          {editingTransaction ? "Update Transaction" : "Add Transaction"}
         </Button>
       </form>
     </Card>

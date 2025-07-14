@@ -1,79 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+/**
+ * CurrencyInput Component
+ *
+ * Enhanced currency input that handles:
+ * - Currency symbols (R$, $, €, etc.)
+ * - Various number formats (1,000.50, 1.000,50, etc.)
+ * - Paste operations with currency symbols
+ * - Real-time numeric extraction without interfering with typing
+ * - Formatting only on blur for better UX
+ * - Robust parsing for both US and BR formats
+ */
 
-interface CurrencyInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
+import React, { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+
+interface CurrencyInputProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "onChange" | "value"
+  > {
   value: string;
   onChange: (value: string) => void;
   currency?: string;
   locale?: string;
 }
 
-export const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
-  ({ value, onChange, currency = 'BRL', locale = 'pt-BR', className, ...props }, ref) => {
-    const [displayValue, setDisplayValue] = useState('');
+function parseCurrencyInput(inputValue: string): string {
+  if (!inputValue) return "";
+  // Remove currency symbols and spaces
+  let cleaned = inputValue.replace(/[^\d.,]/g, "");
+  if (!cleaned) return "";
+
+  // If both ',' and '.' are present, last one is decimal
+  const lastComma = cleaned.lastIndexOf(",");
+  const lastDot = cleaned.lastIndexOf(".");
+  let decimalSep = "";
+  let intPart = cleaned;
+  let fracPart = "";
+
+  if (lastComma !== -1 && lastDot !== -1) {
+    if (lastComma > lastDot) {
+      // ',' is decimal
+      decimalSep = ",";
+    } else {
+      // '.' is decimal
+      decimalSep = ".";
+    }
+  } else if (lastComma !== -1) {
+    decimalSep = ",";
+  } else if (lastDot !== -1) {
+    decimalSep = ".";
+  }
+
+  if (decimalSep) {
+    const lastSep = cleaned.lastIndexOf(decimalSep);
+    intPart = cleaned.slice(0, lastSep).replace(/[^\d]/g, "");
+    fracPart = cleaned.slice(lastSep + 1).replace(/[^\d]/g, "");
+    cleaned = intPart + "." + fracPart;
+  } else {
+    cleaned = cleaned.replace(/[^\d]/g, "");
+  }
+
+  const numericValue = parseFloat(cleaned);
+  return isNaN(numericValue) ? "" : numericValue.toString();
+}
+
+export const CurrencyInput = React.forwardRef<
+  HTMLInputElement,
+  CurrencyInputProps
+>(
+  (
+    {
+      value,
+      onChange,
+      currency = "BRL",
+      locale = "pt-BR",
+      className,
+      ...props
+    },
+    ref
+  ) => {
+    const [displayValue, setDisplayValue] = useState("");
 
     // Format number for display
     const formatNumber = (num: string): string => {
-      if (!num) return '';
-      
-      // Remove all non-numeric characters except dots and commas
-      const cleaned = num.replace(/[^\d.,]/g, '');
-      
-      // Handle different decimal separators
-      let normalizedValue = cleaned;
-      
-      // If using comma as decimal separator (e.g., 2,50)
-      if (normalizedValue.includes(',') && !normalizedValue.includes('.')) {
-        normalizedValue = normalizedValue.replace(',', '.');
-      }
-      // If using comma as thousands separator (e.g., 1,200.50)
-      else if (normalizedValue.includes(',') && normalizedValue.includes('.')) {
-        const lastCommaIndex = normalizedValue.lastIndexOf(',');
-        const lastDotIndex = normalizedValue.lastIndexOf('.');
-        
-        if (lastDotIndex > lastCommaIndex) {
-          // Dot is decimal separator, comma is thousands
-          normalizedValue = normalizedValue.replace(/,/g, '');
-        } else {
-          // Comma is decimal separator, dot might be thousands
-          normalizedValue = normalizedValue.replace(/\./g, '').replace(',', '.');
-        }
-      }
-      
-      const numericValue = parseFloat(normalizedValue);
-      if (isNaN(numericValue)) return '';
-      
+      if (!num) return "";
+      const numericValue = parseFloat(num);
+      if (isNaN(numericValue)) return "";
       return new Intl.NumberFormat(locale, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
       }).format(numericValue);
-    };
-
-    // Get raw numeric value
-    const getRawValue = (formattedValue: string): string => {
-      if (!formattedValue) return '';
-      
-      // Remove formatting and get just the number
-      const cleaned = formattedValue.replace(/[^\d.,]/g, '');
-      let normalizedValue = cleaned;
-      
-      // Handle different decimal separators
-      if (normalizedValue.includes(',') && !normalizedValue.includes('.')) {
-        normalizedValue = normalizedValue.replace(',', '.');
-      } else if (normalizedValue.includes(',') && normalizedValue.includes('.')) {
-        const lastCommaIndex = normalizedValue.lastIndexOf(',');
-        const lastDotIndex = normalizedValue.lastIndexOf('.');
-        
-        if (lastDotIndex > lastCommaIndex) {
-          normalizedValue = normalizedValue.replace(/,/g, '');
-        } else {
-          normalizedValue = normalizedValue.replace(/\./g, '').replace(',', '.');
-        }
-      }
-      
-      const numericValue = parseFloat(normalizedValue);
-      return isNaN(numericValue) ? '' : numericValue.toString();
     };
 
     // Update display value when value prop changes
@@ -81,37 +98,49 @@ export const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputPro
       if (value) {
         setDisplayValue(formatNumber(value));
       } else {
-        setDisplayValue('');
+        setDisplayValue("");
       }
     }, [value, locale]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value;
-      
-      // Allow empty input
       if (!inputValue) {
-        setDisplayValue('');
-        onChange('');
+        setDisplayValue("");
+        onChange("");
         return;
       }
-      
-      // Get raw numeric value
-      const rawValue = getRawValue(inputValue);
-      
-      // Update display with formatted value
-      const formatted = formatNumber(inputValue);
-      setDisplayValue(formatted);
-      
-      // Call onChange with raw numeric value
+      setDisplayValue(inputValue);
+      const rawValue = parseCurrencyInput(inputValue);
       onChange(rawValue);
     };
 
+    const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      const pastedText = e.clipboardData.getData("text");
+      const rawValue = parseCurrencyInput(pastedText);
+      if (rawValue) {
+        setDisplayValue(rawValue);
+        onChange(rawValue);
+      }
+    };
+
     const handleBlur = () => {
-      // Reformat on blur to ensure consistent formatting
       if (displayValue) {
-        const rawValue = getRawValue(displayValue);
-        const formatted = formatNumber(rawValue);
-        setDisplayValue(formatted);
+        const rawValue = parseCurrencyInput(displayValue);
+        if (rawValue) {
+          const formatted = formatNumber(rawValue);
+          setDisplayValue(formatted);
+          onChange(rawValue);
+        } else {
+          setDisplayValue("");
+          onChange("");
+        }
+      }
+    };
+
+    const handleFocus = () => {
+      if (value) {
+        setDisplayValue(value);
       }
     };
 
@@ -122,7 +151,9 @@ export const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputPro
         type="text"
         value={displayValue}
         onChange={handleInputChange}
+        onPaste={handlePaste}
         onBlur={handleBlur}
+        onFocus={handleFocus}
         placeholder="0,00"
         className={cn("text-right", className)}
       />
