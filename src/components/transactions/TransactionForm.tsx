@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { CurrencyInput } from '@/components/ui/currency-input';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -164,14 +165,13 @@ export const TransactionForm = ({
                 <SelectItem value="BRL">BRL</SelectItem>
               </SelectContent>
             </Select>
-            <Input
-              type="number"
-              placeholder="0.00"
+            <CurrencyInput
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              step="0.01"
-              min="0"
+              onChange={setAmount}
+              currency={currency}
+              locale={currency === 'BRL' ? 'pt-BR' : 'en-US'}
               className="flex-1"
+              placeholder="0,00"
             />
           </div>
         </div>
