@@ -1,99 +1,131 @@
-import { Category } from '@/types/finance';
+import { Category } from "@/types/finance";
 
 export const defaultCategories: Category[] = [
   // Expense Categories
   {
-    id: 'food',
-    name: 'Food & Dining',
-    type: 'expense',
-    color: '#f59e0b',
+    id: "food",
+    name: "Food & Dining",
+    type: "expense",
+    color: "#f59e0b",
     budgetLimit: 400,
-    icon: 'utensils'
+    icon: "utensils",
   },
   {
-    id: 'rent',
-    name: 'Rent & Housing',
-    type: 'expense',
-    color: '#ef4444',
+    id: "rent",
+    name: "Rent & Housing",
+    type: "expense",
+    color: "#ef4444",
     budgetLimit: 1200,
-    icon: 'home'
+    icon: "home",
   },
   {
-    id: 'transport',
-    name: 'Transportation',
-    type: 'expense',
-    color: '#8b5cf6',
+    id: "transport",
+    name: "Transportation",
+    type: "expense",
+    color: "#8b5cf6",
     budgetLimit: 200,
-    icon: 'car'
+    icon: "car",
   },
   {
-    id: 'entertainment',
-    name: 'Entertainment',
-    type: 'expense',
-    color: '#06b6d4',
+    id: "entertainment",
+    name: "Entertainment",
+    type: "expense",
+    color: "#06b6d4",
     budgetLimit: 150,
-    icon: 'music'
+    icon: "music",
   },
   {
-    id: 'shopping',
-    name: 'Shopping',
-    type: 'expense',
-    color: '#ec4899',
+    id: "shopping",
+    name: "Shopping",
+    type: "expense",
+    color: "#ec4899",
     budgetLimit: 300,
-    icon: 'shopping-bag'
+    icon: "shopping-bag",
   },
   {
-    id: 'healthcare',
-    name: 'Healthcare',
-    type: 'expense',
-    color: '#10b981',
+    id: "healthcare",
+    name: "Healthcare",
+    type: "expense",
+    color: "#10b981",
     budgetLimit: 200,
-    icon: 'heart'
+    icon: "heart",
   },
   {
-    id: 'utilities',
-    name: 'Utilities',
-    type: 'expense',
-    color: '#f97316',
+    id: "utilities",
+    name: "Utilities",
+    type: "expense",
+    color: "#f97316",
     budgetLimit: 150,
-    icon: 'zap'
+    icon: "zap",
   },
   {
-    id: 'subscriptions',
-    name: 'Subscriptions',
-    type: 'expense',
-    color: '#6366f1',
+    id: "subscriptions",
+    name: "Subscriptions",
+    type: "expense",
+    color: "#6366f1",
     budgetLimit: 50,
-    icon: 'calendar'
+    icon: "calendar",
   },
-  
+  {
+    id: "travel",
+    name: "Travel & Vacations",
+    type: "expense",
+    color: "#8b5cf6",
+    budgetLimit: 200,
+    icon: "plane",
+  },
+  {
+    id: "dining",
+    name: "Dining Out",
+    type: "expense",
+    color: "#f59e0b",
+    budgetLimit: 150,
+    icon: "utensils",
+  },
+  {
+    id: "personal-care",
+    name: "Personal Care",
+    type: "expense",
+    color: "#ec4899",
+    budgetLimit: 100,
+    icon: "scissors",
+  },
+  {
+    id: "gifts",
+    name: "Gifts & Donations",
+    type: "expense",
+    color: "#06b6d4",
+    budgetLimit: 100,
+    icon: "gift",
+  },
+
   // Income Categories
   {
-    id: 'salary',
-    name: 'Salary',
-    type: 'income',
-    color: '#059669',
-    icon: 'briefcase'
+    id: "salary",
+    name: "Salary",
+    type: "income",
+    color: "#059669",
+    icon: "briefcase",
   },
   {
-    id: 'freelance',
-    name: 'Freelance',
-    type: 'income',
-    color: '#0891b2',
-    icon: 'laptop'
+    id: "freelance",
+    name: "Freelance",
+    type: "income",
+    color: "#0891b2",
+    icon: "laptop",
   },
   {
-    id: 'investments',
-    name: 'Investments',
-    type: 'income',
-    color: '#7c3aed',
-    icon: 'trending-up'
+    id: "investments",
+    name: "Investments",
+    type: "income",
+    color: "#7c3aed",
+    icon: "trending-up",
   },
   {
-    id: 'other-income',
-    name: 'Other Income',
-    type: 'income',
-    color: '#16a34a',
-    icon: 'plus'
-  }
+    id: "other-income",
+    name: "Other Income",
+    type: "income",
+    color: "#16a34a",
+    icon: "plus",
+  },
 ];

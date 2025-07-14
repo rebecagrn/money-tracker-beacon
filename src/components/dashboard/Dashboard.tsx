@@ -7,6 +7,7 @@ import { TransactionEditModal } from "../transactions/TransactionEditModal";
 import { SpendingChart } from "../charts/SpendingChart";
 import { BillImporter } from "../bills/BillImporter";
 import { BalanceForecast } from "../forecast/BalanceForecast";
+import { BudgetAllocationPage } from "../budget/BudgetAllocationPage";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -311,9 +312,10 @@ export const Dashboard = () => {
           onValueChange={handleTabChange}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
+            <TabsTrigger value="budget">Budget</TabsTrigger>
             <TabsTrigger value="import">Import Bills</TabsTrigger>
             <TabsTrigger value="forecast">Forecast</TabsTrigger>
           </TabsList>
@@ -410,6 +412,10 @@ export const Dashboard = () => {
               onDeleteTransaction={deleteTransaction}
               onEditTransaction={handleEditClick}
             />
+          </TabsContent>
+
+          <TabsContent value="budget">
+            <BudgetAllocationPage transactions={transactions} />
           </TabsContent>
 
           <TabsContent value="import">
