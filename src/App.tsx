@@ -33,7 +33,7 @@ const AppContent = () => {
         <div className="flex-1 flex flex-col">
           <header className="h-14 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center px-4 justify-between">
             <div className="flex items-center">
-              <SidebarTrigger className="mr-4" />
+              <SidebarTrigger className="mr-2" />
               <h1 className="text-lg font-semibold text-foreground">
                 {t("dashboard.title")}
               </h1>
