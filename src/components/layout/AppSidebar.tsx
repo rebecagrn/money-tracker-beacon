@@ -10,6 +10,7 @@ import {
   Upload,
   CreditCard,
   PieChart,
+  Database,
 } from "lucide-react";
 
 import {
@@ -31,6 +32,7 @@ export function AppSidebar() {
   const mainItems = [
     { title: t("navigation.dashboard"), url: "/", icon: Home },
     { title: t("navigation.goals"), url: "/goals", icon: Target },
+    { title: "Backup Data", url: "/backup", icon: Database },
   ];
 
   const dashboardItems = [

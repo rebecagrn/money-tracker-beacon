@@ -1,0 +1,469 @@
+import React, { useState, useRef } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import {
+  Download,
+  Upload,
+  Database,
+  FileText,
+  CheckCircle,
+  AlertTriangle,
+  Info,
+  Trash2,
+  RefreshCw,
+} from "lucide-react";
+import { Transaction, FinancialGoal } from "@/types/finance";
+import { useToast } from "@/hooks/use-toast";
+
+interface BackupData {
+  transactions: Transaction[];
+  goals: FinancialGoal[];
+  settings: {
+    netIncome?: number;
+    defaultCurrency?: string;
+    wallets?: string[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    categories?: any[];
+  };
+  metadata: {
+    exportDate: string;
+    version: string;
+    totalTransactions: number;
+    totalGoals: number;
+  };
+}
+
+export const Backup = () => {
+  const [isExporting, setIsExporting] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const [importData, setImportData] = useState<BackupData | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  // Get all data from localStorage
+  const getAllData = (): BackupData => {
+    const transactions: Transaction[] = JSON.parse(
+      localStorage.getItem("finance-transactions") || "[]"
+    );
+    const goals: FinancialGoal[] = JSON.parse(
+      localStorage.getItem("finance-goals") || "[]"
+    );
+    const netIncome = localStorage.getItem("budget-net-income");
+    const defaultCurrency = localStorage.getItem("default-currency") || "BRL";
+    const wallets = JSON.parse(
+      localStorage.getItem("finance-wallets") || '["Main Wallet"]'
+    );
+    const categories = JSON.parse(
+      localStorage.getItem("finance-categories") || "[]"
+    );
+
+    return {
+      transactions,
+      goals,
+      settings: {
+        netIncome: netIncome ? parseFloat(netIncome) : undefined,
+        defaultCurrency,
+        wallets,
+        categories,
+      },
+      metadata: {
+        exportDate: new Date().toISOString(),
+        version: "1.0.0",
+        totalTransactions: transactions.length,
+        totalGoals: goals.length,
+      },
+    };
+  };
+
+  // Export data to JSON file
+  const handleExport = async () => {
+    setIsExporting(true);
+    try {
+      const data = getAllData();
+      const jsonString = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `finance-backup-${
+        new Date().toISOString().split("T")[0]
+      }.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Backup Exported",
+        description: `Successfully exported ${data.metadata.totalTransactions} transactions and ${data.metadata.totalGoals} goals.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Export Failed",
+        description: "Failed to export data. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Handle file selection for import
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const data: BackupData = JSON.parse(content);
+
+        // Validate the backup data structure
+        if (!data.transactions || !data.goals || !data.metadata) {
+          throw new Error("Invalid backup file format");
+        }
+
+        setImportData(data);
+        setShowPreview(true);
+        toast({
+          title: "File Loaded",
+          description: `Found ${data.metadata.totalTransactions} transactions and ${data.metadata.totalGoals} goals.`,
+        });
+      } catch (error) {
+        toast({
+          title: "Invalid File",
+          description: "Please select a valid backup file.",
+          variant: "destructive",
+        });
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  // Import data from JSON file
+  const handleImport = async () => {
+    if (!importData) return;
+
+    setIsImporting(true);
+    try {
+      // Backup current data before import
+      const currentData = getAllData();
+      const backupBlob = new Blob([JSON.stringify(currentData, null, 2)], {
+        type: "application/json",
+      });
+      const backupUrl = window.URL.createObjectURL(backupBlob);
+      const backupLink = document.createElement("a");
+      backupLink.href = backupUrl;
+      backupLink.download = `finance-backup-before-import-${
+        new Date().toISOString().split("T")[0]
+      }.json`;
+      document.body.appendChild(backupLink);
+      backupLink.click();
+      document.body.removeChild(backupLink);
+      window.URL.revokeObjectURL(backupUrl);
+
+      // Import new data
+      localStorage.setItem(
+        "finance-transactions",
+        JSON.stringify(importData.transactions)
+      );
+      localStorage.setItem("finance-goals", JSON.stringify(importData.goals));
+
+      if (importData.settings.netIncome) {
+        localStorage.setItem(
+          "budget-net-income",
+          importData.settings.netIncome.toString()
+        );
+      }
+      if (importData.settings.defaultCurrency) {
+        localStorage.setItem(
+          "default-currency",
+          importData.settings.defaultCurrency
+        );
+      }
+      if (importData.settings.wallets) {
+        localStorage.setItem(
+          "finance-wallets",
+          JSON.stringify(importData.settings.wallets)
+        );
+      }
+      if (importData.settings.categories) {
+        localStorage.setItem(
+          "finance-categories",
+          JSON.stringify(importData.settings.categories)
+        );
+      }
+
+      setImportData(null);
+      setShowPreview(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      toast({
+        title: "Import Successful",
+        description: `Successfully imported ${importData.metadata.totalTransactions} transactions and ${importData.metadata.totalGoals} goals.`,
+      });
+
+      // Reload the page to reflect changes
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      toast({
+        title: "Import Failed",
+        description: "Failed to import data. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
+  // Clear all data
+  const handleClearData = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to clear all data? This action cannot be undone."
+      )
+    ) {
+      localStorage.removeItem("finance-transactions");
+      localStorage.removeItem("finance-goals");
+      localStorage.removeItem("budget-net-income");
+      localStorage.removeItem("default-currency");
+      localStorage.removeItem("finance-wallets");
+      localStorage.removeItem("finance-categories");
+
+      toast({
+        title: "Data Cleared",
+        description: "All financial data has been cleared.",
+      });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  };
+
+  const currentData = getAllData();
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Backup Data</h1>
+          <p className="text-muted-foreground">
+            Export and import your financial data for backup and transfer
+          </p>
+        </div>
+        <Badge variant="secondary" className="text-sm">
+          <Database className="w-3 h-3 mr-1" />
+          Local Storage
+        </Badge>
+      </div>
+
+      {/* Current Data Summary */}
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Info className="w-5 h-5" />
+          Current Data Summary
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="text-center">
+            <p className="text-2xl font-bold text-blue-600">
+              {currentData.metadata.totalTransactions}
+            </p>
+            <p className="text-sm text-muted-foreground">Transactions</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold text-green-600">
+              {currentData.metadata.totalGoals}
+            </p>
+            <p className="text-sm text-muted-foreground">Goals</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold text-purple-600">
+              {currentData.settings.wallets?.length || 1}
+            </p>
+            <p className="text-sm text-muted-foreground">Wallets</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold text-orange-600">
+              {currentData.settings.defaultCurrency || "BRL"}
+            </p>
+            <p className="text-sm text-muted-foreground">Default Currency</p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Export Section */}
+      <Card className="p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+            <Download className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold">Export Data</h3>
+            <p className="text-muted-foreground">
+              Download all your financial data as a JSON file
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            This will export all your transactions, goals, and settings to a
+            JSON file that you can:
+          </p>
+          <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+            <li>• Save as a backup on your computer</li>
+            <li>• Transfer to another device</li>
+            <li>• Share with family members (if desired)</li>
+          </ul>
+
+          <Button
+            onClick={handleExport}
+            disabled={isExporting}
+            className="gap-2"
+          >
+            {isExporting ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            {isExporting ? "Exporting..." : "Export Data"}
+          </Button>
+        </div>
+      </Card>
+
+      {/* Import Section */}
+      <Card className="p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
+            <Upload className="w-5 h-5 text-green-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold">Import Data</h3>
+            <p className="text-muted-foreground">
+              Import financial data from a backup file
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <Alert>
+            <AlertTriangle className="w-4 h-4" />
+            <AlertDescription>
+              <strong>Warning:</strong> Importing will replace all current data.
+              A backup of your current data will be automatically created before
+              import.
+            </AlertDescription>
+          </Alert>
+
+          <div className="space-y-2">
+            <Label htmlFor="import-file">Select Backup File</Label>
+            <Input
+              id="import-file"
+              type="file"
+              accept=".json"
+              onChange={handleFileSelect}
+              ref={fileInputRef}
+              className="cursor-pointer"
+            />
+            <p className="text-xs text-muted-foreground">
+              Select a JSON backup file exported from this app
+            </p>
+          </div>
+
+          {showPreview && importData && (
+            <div className="space-y-4">
+              <Alert>
+                <CheckCircle className="w-4 h-4" />
+                <AlertDescription>
+                  <strong>File Preview:</strong> Found{" "}
+                  {importData.metadata.totalTransactions} transactions and{" "}
+                  {importData.metadata.totalGoals} goals from{" "}
+                  {new Date(
+                    importData.metadata.exportDate
+                  ).toLocaleDateString()}
+                  .
+                </AlertDescription>
+              </Alert>
+
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleImport}
+                  disabled={isImporting}
+                  className="gap-2"
+                >
+                  {isImporting ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Upload className="w-4 h-4" />
+                  )}
+                  {isImporting ? "Importing..." : "Import Data"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setImportData(null);
+                    setShowPreview(false);
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = "";
+                    }
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </Card>
+
+      {/* Clear Data Section */}
+      <Card className="p-6 border-destructive/20">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-xl flex items-center justify-center">
+            <Trash2 className="w-5 h-5 text-red-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-destructive">
+              Clear All Data
+            </h3>
+            <p className="text-muted-foreground">
+              Permanently delete all financial data from this device
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <Alert className="border-destructive">
+            <AlertTriangle className="w-4 h-4" />
+            <AlertDescription>
+              <strong>Danger Zone:</strong> This action will permanently delete
+              all your transactions, goals, and settings. Make sure you have a
+              backup before proceeding.
+            </AlertDescription>
+          </Alert>
+
+          <Button
+            variant="destructive"
+            onClick={handleClearData}
+            className="gap-2"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear All Data
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+};

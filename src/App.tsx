@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import Index from "./pages/Index";
 import { Goals } from "./pages/Goals";
+import { Backup } from "./pages/Backup";
 import NotFound from "./pages/NotFound";
 import LanguageSelector from "@/components/language/LanguageSelector";
 import { useTranslation } from "react-i18next";
@@ -50,6 +51,7 @@ const AppContent = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/goals" element={<Goals />} />
+              <Route path="/backup" element={<Backup />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
