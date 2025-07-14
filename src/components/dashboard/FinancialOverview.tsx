@@ -1,6 +1,6 @@
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowUp, ArrowDown, Circle } from 'lucide-react';
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowUp, ArrowDown, Circle } from "lucide-react";
 
 interface FinancialData {
   totalIncome: number;
@@ -15,14 +15,14 @@ interface FinancialOverviewProps {
 
 export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
   const { totalIncome, totalExpenses, balance, currency } = data;
-  const balanceColor = balance >= 0 ? 'text-success' : 'text-danger';
+  const balanceColor = balance >= 0 ? "text-success" : "text-danger";
   const balanceIcon = balance >= 0 ? ArrowUp : ArrowDown;
   const BalanceIcon = balanceIcon;
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency || 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency || "USD",
     }).format(amount);
   };
 
@@ -45,13 +45,22 @@ export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
         </div>
         <div className="mt-4">
           <Badge variant="secondary" className="bg-success-light text-success">
-            +{((totalIncome / (totalIncome + totalExpenses)) * 100).toFixed(1)}%
+            +
+            {totalIncome + totalExpenses === 0
+              ? "0.0"
+              : ((totalIncome / (totalIncome + totalExpenses)) * 100).toFixed(
+                  1
+                )}
+            %
           </Badge>
         </div>
       </Card>
 
       {/* Total Expenses */}
-      <Card className="finance-card p-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+      <Card
+        className="finance-card p-6 animate-slide-up"
+        style={{ animationDelay: "0.1s" }}
+      >
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground mb-1">
@@ -67,13 +76,22 @@ export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
         </div>
         <div className="mt-4">
           <Badge variant="secondary" className="bg-warning-light text-warning">
-            -{((totalExpenses / (totalIncome + totalExpenses)) * 100).toFixed(1)}%
+            -
+            {totalIncome + totalExpenses === 0
+              ? "0.0"
+              : ((totalExpenses / (totalIncome + totalExpenses)) * 100).toFixed(
+                  1
+                )}
+            %
           </Badge>
         </div>
       </Card>
 
       {/* Balance */}
-      <Card className="finance-card p-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+      <Card
+        className="finance-card p-6 animate-slide-up"
+        style={{ animationDelay: "0.2s" }}
+      >
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground mb-1">
@@ -83,19 +101,24 @@ export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
               {formatCurrency(balance)}
             </p>
           </div>
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            balance >= 0 ? 'success-gradient' : 'bg-danger'
-          }`}>
+          <div
+            className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+              balance >= 0 ? "success-gradient" : "bg-danger"
+            }`}
+          >
             <BalanceIcon className="w-6 h-6 text-white" />
           </div>
         </div>
         <div className="mt-4">
-          <Badge variant="secondary" className={
-            balance >= 0 
-              ? 'bg-success-light text-success' 
-              : 'bg-danger-light text-danger'
-          }>
-            {balance >= 0 ? 'Positive' : 'Negative'}
+          <Badge
+            variant="secondary"
+            className={
+              balance >= 0
+                ? "bg-success-light text-success"
+                : "bg-danger-light text-danger"
+            }
+          >
+            {balance >= 0 ? "Positive" : "Negative"}
           </Badge>
         </div>
       </Card>
