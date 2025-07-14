@@ -1,0 +1,69 @@
+{
+  "dashboard": {
+    "title": "Financial Dashboard",
+    "overview": "Overview",
+    "transactions": "Transactions",
+    "importBills": "Import Bills",
+    "forecast": "Forecast",
+    "netIncome": "Net Income",
+    "spendingAnalysis": "Spending Analysis",
+    "balance": "Balance",
+    "income": "Income",
+    "expenses": "Expenses",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "change": "Change"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "addTransaction": "Add Transaction",
+    "editTransaction": "Edit Transaction",
+    "description": "Description",
+    "amount": "Amount",
+    "category": "Category",
+    "date": "Date",
+    "type": "Type",
+    "income": "Income",
+    "expense": "Expense",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "noTransactions": "No transactions found"
+  },
+  "goals": {
+    "title": "Goals",
+    "financialGoals": "Financial Goals",
+    "overview": "Goals Overview",
+    "addGoal": "Add Goal",
+    "editGoal": "Edit Goal",
+    "goalName": "Goal Name",
+    "targetAmount": "Target Amount",
+    "currentAmount": "Current Amount",
+    "deadline": "Deadline",
+    "category": "Category",
+    "progress": "Progress",
+    "completed": "Completed",
+    "pending": "Pending",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "common": {
+    "language": "Language",
+    "portuguese": "Portuguese",
+    "english": "English",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "close": "Close"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "goals": "Goals",
+    "reports": "Reports",
+    "settings": "Settings"
+  }
+}

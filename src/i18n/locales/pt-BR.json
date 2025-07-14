@@ -1,0 +1,69 @@
+{
+  "dashboard": {
+    "title": "Painel Financeiro",
+    "overview": "Visão Geral",
+    "transactions": "Transações",
+    "importBills": "Importar Contas",
+    "forecast": "Previsão",
+    "netIncome": "Receita Líquida",
+    "spendingAnalysis": "Análise de Gastos",
+    "balance": "Saldo",
+    "income": "Receita",
+    "expenses": "Despesas",
+    "thisMonth": "Este Mês",
+    "lastMonth": "Mês Passado",
+    "change": "Variação"
+  },
+  "transactions": {
+    "title": "Transações",
+    "addTransaction": "Adicionar Transação",
+    "editTransaction": "Editar Transação",
+    "description": "Descrição",
+    "amount": "Valor",
+    "category": "Categoria",
+    "date": "Data",
+    "type": "Tipo",
+    "income": "Receita",
+    "expense": "Despesa",
+    "actions": "Ações",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "noTransactions": "Nenhuma transação encontrada"
+  },
+  "goals": {
+    "title": "Metas",
+    "financialGoals": "Metas Financeiras",
+    "overview": "Visão Geral das Metas",
+    "addGoal": "Adicionar Meta",
+    "editGoal": "Editar Meta",
+    "goalName": "Nome da Meta",
+    "targetAmount": "Valor Alvo",
+    "currentAmount": "Valor Atual",
+    "deadline": "Prazo",
+    "category": "Categoria",
+    "progress": "Progresso",
+    "completed": "Concluída",
+    "pending": "Pendente",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir"
+  },
+  "common": {
+    "language": "Idioma",
+    "portuguese": "Português",
+    "english": "Inglês",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "confirm": "Confirmar",
+    "close": "Fechar"
+  },
+  "navigation": {
+    "dashboard": "Painel",
+    "goals": "Metas",
+    "reports": "Relatórios",
+    "settings": "Configurações"
+  }
+}
