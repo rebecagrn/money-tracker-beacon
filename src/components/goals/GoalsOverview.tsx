@@ -1,17 +1,23 @@
-import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { FinancialGoal } from '@/types/finance';
-import { formatCurrency } from '@/utils/financeCalculations';
-import { Target, Calendar, TrendingUp } from 'lucide-react';
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { FinancialGoal } from "@/types/finance";
+import { formatCurrency } from "@/utils/financeCalculations";
+import { Target, Calendar, TrendingUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface GoalsOverviewProps {
   goals: FinancialGoal[];
 }
 
 export const GoalsOverview = ({ goals }: GoalsOverviewProps) => {
-  const activeGoals = goals.filter(goal => goal.currentAmount < goal.targetAmount);
-  const completedGoals = goals.filter(goal => goal.currentAmount >= goal.targetAmount);
+  const { t } = useTranslation();
+  const activeGoals = goals.filter(
+    (goal) => goal.currentAmount < goal.targetAmount
+  );
+  const completedGoals = goals.filter(
+    (goal) => goal.currentAmount >= goal.targetAmount
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -21,8 +27,12 @@ export const GoalsOverview = ({ goals }: GoalsOverviewProps) => {
             <Target className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold">Active Goals</h3>
-            <p className="text-2xl font-bold text-primary">{activeGoals.length}</p>
+            <h3 className="font-semibold">
+              {t("goals.activeGoals", "Active Goals")}
+            </h3>
+            <p className="text-2xl font-bold text-primary">
+              {activeGoals.length}
+            </p>
           </div>
         </div>
       </Card>
@@ -33,8 +43,12 @@ export const GoalsOverview = ({ goals }: GoalsOverviewProps) => {
             <TrendingUp className="w-5 h-5 text-success" />
           </div>
           <div>
-            <h3 className="font-semibold">Completed</h3>
-            <p className="text-2xl font-bold text-success">{completedGoals.length}</p>
+            <h3 className="font-semibold">
+              {t("goals.completed", "Completed")}
+            </h3>
+            <p className="text-2xl font-bold text-success">
+              {completedGoals.length}
+            </p>
           </div>
         </div>
       </Card>
@@ -45,7 +59,9 @@ export const GoalsOverview = ({ goals }: GoalsOverviewProps) => {
             <Calendar className="w-5 h-5 text-warning" />
           </div>
           <div>
-            <h3 className="font-semibold">Total Goals</h3>
+            <h3 className="font-semibold">
+              {t("goals.totalGoals", "Total Goals")}
+            </h3>
             <p className="text-2xl font-bold text-foreground">{goals.length}</p>
           </div>
         </div>

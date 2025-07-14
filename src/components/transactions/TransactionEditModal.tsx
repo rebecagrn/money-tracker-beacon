@@ -1,13 +1,19 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { TransactionForm } from './TransactionForm';
-import { Transaction } from '@/types/finance';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { TransactionForm } from "./TransactionForm";
+import { Transaction } from "@/types/finance";
+import { useTranslation } from "react-i18next";
 
 interface TransactionEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   transaction: Transaction | null;
   onEditTransaction: (transaction: Transaction) => void;
-  onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void;
+  onAddTransaction: (transaction: Omit<Transaction, "id">) => void;
 }
 
 export const TransactionEditModal = ({
@@ -15,8 +21,9 @@ export const TransactionEditModal = ({
   onClose,
   transaction,
   onEditTransaction,
-  onAddTransaction
+  onAddTransaction,
 }: TransactionEditModalProps) => {
+  const { t } = useTranslation();
   const handleSuccess = () => {
     onClose();
   };
@@ -26,10 +33,12 @@ export const TransactionEditModal = ({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {transaction ? 'Edit Transaction' : 'Add Transaction'}
+            {transaction
+              ? t("transactions.editTransaction")
+              : t("transactions.addTransaction")}
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="mt-4">
           <TransactionForm
             onAddTransaction={(newTransaction) => {

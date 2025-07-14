@@ -16,6 +16,7 @@ import { ArrowUp, ArrowDown, Plus } from "lucide-react";
 import { Transaction } from "@/types/finance";
 import { defaultCategories } from "@/data/defaultCategories";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface TransactionFormProps {
   onAddTransaction: (transaction: Omit<Transaction, "id">) => void;
@@ -32,6 +33,7 @@ export const TransactionForm = ({
   defaultCurrency = "BRL",
   wallets = ["Main Wallet"],
 }: TransactionFormProps) => {
+  const { t } = useTranslation();
   const [type, setType] = useState<"income" | "expense">(
     editingTransaction?.type || "expense"
   );
@@ -186,7 +188,9 @@ export const TransactionForm = ({
         <div className="flex flex-row gap-2">
           {/* Amount */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Amount</label>
+            <label className="text-sm font-medium">
+              {t("transactions.amount")}
+            </label>
             <div className="flex gap-2">
               <Select value={currency} onValueChange={setCurrency}>
                 <SelectTrigger className="w-24">
@@ -217,10 +221,12 @@ export const TransactionForm = ({
 
           {/* Category */}
           <div className="space-y-2 w-full">
-            <label className="text-sm font-medium">Category</label>
+            <label className="text-sm font-medium">
+              {t("transactions.category")}
+            </label>
             <Select value={category} onValueChange={setCategory}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
+                <SelectValue placeholder={t("transactions.selectCategory")} />
               </SelectTrigger>
               <SelectContent>
                 {availableCategories.map((cat) => (
@@ -241,9 +247,11 @@ export const TransactionForm = ({
 
         {/* Description */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Description</label>
+          <label className="text-sm font-medium">
+            {t("transactions.description")}
+          </label>
           <Input
-            placeholder="Enter transaction description"
+            placeholder={t("transactions.enterDescription")}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -252,7 +260,9 @@ export const TransactionForm = ({
         {/* Wallet Selection */}
         {wallets.length > 1 && (
           <div className="space-y-2">
-            <label className="text-sm font-medium">Wallet</label>
+            <label className="text-sm font-medium">
+              {t("transactions.wallet")}
+            </label>
             <Select value={wallet} onValueChange={setWallet}>
               <SelectTrigger>
                 <SelectValue />
@@ -273,10 +283,10 @@ export const TransactionForm = ({
           <div className="flex items-center justify-between">
             <div>
               <label className="text-sm font-medium">
-                Recurring Transaction
+                {t("transactions.recurringTransaction")}
               </label>
               <p className="text-xs text-muted-foreground">
-                This transaction repeats automatically
+                {t("transactions.thisTransactionRepeatsAutomatically")}
               </p>
             </div>
             <Switch checked={isRecurring} onCheckedChange={setIsRecurring} />
@@ -293,9 +303,15 @@ export const TransactionForm = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
+                <SelectItem value="weekly">
+                  {t("transactions.weekly")}
+                </SelectItem>
+                <SelectItem value="monthly">
+                  {t("transactions.monthly")}
+                </SelectItem>
+                <SelectItem value="yearly">
+                  {t("transactions.yearly")}
+                </SelectItem>
               </SelectContent>
             </Select>
           )}

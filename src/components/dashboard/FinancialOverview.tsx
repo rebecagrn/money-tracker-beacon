@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUp, ArrowDown, Circle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface FinancialData {
   totalIncome: number;
@@ -18,6 +19,7 @@ export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
   const balanceColor = balance >= 0 ? "text-success" : "text-danger";
   const balanceIcon = balance >= 0 ? ArrowUp : ArrowDown;
   const BalanceIcon = balanceIcon;
+  const { t } = useTranslation();
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -33,7 +35,7 @@ export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground mb-1">
-              Total Income
+              {t("dashboard.totalIncome")}
             </p>
             <p className="text-2xl font-bold text-success">
               {formatCurrency(totalIncome)}
@@ -64,7 +66,7 @@ export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground mb-1">
-              Total Expenses
+              {t("dashboard.totalExpenses")}
             </p>
             <p className="text-2xl font-bold text-warning">
               {formatCurrency(totalExpenses)}
@@ -95,7 +97,7 @@ export const FinancialOverview = ({ data }: FinancialOverviewProps) => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground mb-1">
-              Current Balance
+              {t("dashboard.currentBalance")}
             </p>
             <p className={`text-2xl font-bold ${balanceColor}`}>
               {formatCurrency(balance)}

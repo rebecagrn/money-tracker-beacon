@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +39,7 @@ interface BackupData {
 }
 
 export const Backup = () => {
+  const { t } = useTranslation();
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [importData, setImportData] = useState<BackupData | null>(null);
@@ -258,14 +260,14 @@ export const Backup = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Backup Data</h1>
-          <p className="text-muted-foreground">
-            Export and import your financial data for backup and transfer
-          </p>
+          <h1 className="text-3xl font-bold text-foreground">
+            {t("backup.title")}
+          </h1>
+          <p className="text-muted-foreground">{t("backup.subtitle")}</p>
         </div>
         <Badge variant="secondary" className="text-sm">
           <Database className="w-3 h-3 mr-1" />
-          Local Storage
+          {t("backup.localStorage")}
         </Badge>
       </div>
 
@@ -273,32 +275,38 @@ export const Backup = () => {
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <Info className="w-5 h-5" />
-          Current Data Summary
+          {t("backup.currentSummary")}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="text-center">
             <p className="text-2xl font-bold text-blue-600">
               {currentData.metadata.totalTransactions}
             </p>
-            <p className="text-sm text-muted-foreground">Transactions</p>
+            <p className="text-sm text-muted-foreground">
+              {t("backup.transactions")}
+            </p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-bold text-green-600">
               {currentData.metadata.totalGoals}
             </p>
-            <p className="text-sm text-muted-foreground">Goals</p>
+            <p className="text-sm text-muted-foreground">{t("backup.goals")}</p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-bold text-purple-600">
               {currentData.settings.wallets?.length || 1}
             </p>
-            <p className="text-sm text-muted-foreground">Wallets</p>
+            <p className="text-sm text-muted-foreground">
+              {t("backup.wallets")}
+            </p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-bold text-orange-600">
               {currentData.settings.defaultCurrency || "BRL"}
             </p>
-            <p className="text-sm text-muted-foreground">Default Currency</p>
+            <p className="text-sm text-muted-foreground">
+              {t("backup.defaultCurrency")}
+            </p>
           </div>
         </div>
       </Card>
@@ -310,22 +318,19 @@ export const Backup = () => {
             <Download className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold">Export Data</h3>
-            <p className="text-muted-foreground">
-              Download all your financial data as a JSON file
-            </p>
+            <h3 className="text-lg font-semibold">{t("backup.export")}</h3>
+            <p className="text-muted-foreground">{t("backup.exportDesc")}</p>
           </div>
         </div>
 
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            This will export all your transactions, goals, and settings to a
-            JSON file that you can:
+            {t("backup.exportBenefits")}
           </p>
           <ul className="text-sm text-muted-foreground space-y-1 ml-4">
-            <li>• Save as a backup on your computer</li>
-            <li>• Transfer to another device</li>
-            <li>• Share with family members (if desired)</li>
+            <li>• {t("backup.exportBenefit1")}</li>
+            <li>• {t("backup.exportBenefit2")}</li>
+            <li>• {t("backup.exportBenefit3")}</li>
           </ul>
 
           <Button
@@ -338,7 +343,7 @@ export const Backup = () => {
             ) : (
               <Download className="w-4 h-4" />
             )}
-            {isExporting ? "Exporting..." : "Export Data"}
+            {isExporting ? t("backup.exporting") : t("backup.exportData")}
           </Button>
         </div>
       </Card>
@@ -350,10 +355,8 @@ export const Backup = () => {
             <Upload className="w-5 h-5 text-green-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold">Import Data</h3>
-            <p className="text-muted-foreground">
-              Import financial data from a backup file
-            </p>
+            <h3 className="text-lg font-semibold">{t("backup.import")}</h3>
+            <p className="text-muted-foreground">{t("backup.importDesc")}</p>
           </div>
         </div>
 
@@ -361,14 +364,13 @@ export const Backup = () => {
           <Alert>
             <AlertTriangle className="w-4 h-4" />
             <AlertDescription>
-              <strong>Warning:</strong> Importing will replace all current data.
-              A backup of your current data will be automatically created before
-              import.
+              <strong>{t("common.warning")}:</strong>{" "}
+              {t("backup.importWarning")}
             </AlertDescription>
           </Alert>
 
           <div className="space-y-2">
-            <Label htmlFor="import-file">Select Backup File</Label>
+            <Label htmlFor="import-file">{t("backup.selectFile")}</Label>
             <Input
               id="import-file"
               type="file"
@@ -378,7 +380,7 @@ export const Backup = () => {
               className="cursor-pointer"
             />
             <p className="text-xs text-muted-foreground">
-              Select a JSON backup file exported from this app
+              {t("backup.fileHelper")}
             </p>
           </div>
 
@@ -387,13 +389,14 @@ export const Backup = () => {
               <Alert>
                 <CheckCircle className="w-4 h-4" />
                 <AlertDescription>
-                  <strong>File Preview:</strong> Found{" "}
-                  {importData.metadata.totalTransactions} transactions and{" "}
-                  {importData.metadata.totalGoals} goals from{" "}
-                  {new Date(
-                    importData.metadata.exportDate
-                  ).toLocaleDateString()}
-                  .
+                  <strong>{t("backup.filePreview")}:</strong>{" "}
+                  {t("backup.filePreviewDesc", {
+                    transactions: importData.metadata.totalTransactions,
+                    goals: importData.metadata.totalGoals,
+                    date: new Date(
+                      importData.metadata.exportDate
+                    ).toLocaleDateString(),
+                  })}
                 </AlertDescription>
               </Alert>
 
@@ -408,7 +411,7 @@ export const Backup = () => {
                   ) : (
                     <Upload className="w-4 h-4" />
                   )}
-                  {isImporting ? "Importing..." : "Import Data"}
+                  {isImporting ? t("backup.importing") : t("backup.importData")}
                 </Button>
                 <Button
                   variant="outline"
@@ -420,7 +423,7 @@ export const Backup = () => {
                     }
                   }}
                 >
-                  Cancel
+                  {t("common.cancel")}
                 </Button>
               </div>
             </div>
@@ -436,11 +439,9 @@ export const Backup = () => {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-destructive">
-              Clear All Data
+              {t("backup.clear")}
             </h3>
-            <p className="text-muted-foreground">
-              Permanently delete all financial data from this device
-            </p>
+            <p className="text-muted-foreground">{t("backup.clearDesc")}</p>
           </div>
         </div>
 
@@ -448,9 +449,8 @@ export const Backup = () => {
           <Alert className="border-destructive">
             <AlertTriangle className="w-4 h-4" />
             <AlertDescription>
-              <strong>Danger Zone:</strong> This action will permanently delete
-              all your transactions, goals, and settings. Make sure you have a
-              backup before proceeding.
+              <strong>{t("backup.dangerZone")}:</strong>{" "}
+              {t("backup.clearWarning")}
             </AlertDescription>
           </Alert>
 
@@ -460,7 +460,7 @@ export const Backup = () => {
             className="gap-2"
           >
             <Trash2 className="w-4 h-4" />
-            Clear All Data
+            {t("backup.clearData")}
           </Button>
         </div>
       </Card>
