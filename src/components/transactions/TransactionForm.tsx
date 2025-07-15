@@ -156,7 +156,7 @@ export const TransactionForm = ({
           <Plus className="w-5 h-5 text-white" />
         </div>
         <h3 className="text-xl font-semibold">
-          {editingTransaction ? "Edit Transaction" : "Add Transaction"}
+          {editingTransaction ? t("transactions.editTransaction") : t("transactions.addTransaction")}
         </h3>
       </div>
 
@@ -170,19 +170,19 @@ export const TransactionForm = ({
             className={
               type === "expense" ? "bg-warning hover:bg-warning/90" : ""
             }
-          >
-            <ArrowDown className="w-4 h-4 mr-2" />
-            Expense
-          </Button>
-          <Button
-            type="button"
-            variant={type === "income" ? "default" : "outline"}
-            onClick={() => setType("income")}
-            className={type === "income" ? "success-gradient" : ""}
-          >
-            <ArrowUp className="w-4 h-4 mr-2" />
-            Income
-          </Button>
+            >
+              <ArrowDown className="w-4 h-4 mr-2" />
+              {t("transactions.expense")}
+            </Button>
+            <Button
+              type="button"
+              variant={type === "income" ? "default" : "outline"}
+              onClick={() => setType("income")}
+              className={type === "income" ? "success-gradient" : ""}
+            >
+              <ArrowUp className="w-4 h-4 mr-2" />
+              {t("transactions.income")}
+            </Button>
         </div>
 
         <div className="flex flex-row gap-2">
@@ -319,7 +319,7 @@ export const TransactionForm = ({
           <div className="flex items-center justify-between">
             <div>
               <label className="text-sm font-medium">
-                Fixed {type === "income" ? "Income" : "Expense"}
+                {type === "income" ? t("transactions.income") : t("transactions.expense")}
               </label>
               <p className="text-xs text-muted-foreground">
                 {type === "income"
@@ -335,18 +335,18 @@ export const TransactionForm = ({
         <div className="flex gap-2 flex-wrap">
           {isRecurring && (
             <Badge variant="secondary" className="bg-primary/10 text-primary">
-              Recurring {recurringFrequency}
+              {t("transactions.recurringTransaction")} {t(`transactions.${recurringFrequency}`)}
             </Badge>
           )}
           {isFixed && (
             <Badge variant="secondary" className="bg-secondary">
-              Fixed {type}
+              Fixed {type === "income" ? t("transactions.income") : t("transactions.expense")}
             </Badge>
           )}
         </div>
 
         <Button type="submit" className="w-full finance-gradient">
-          {editingTransaction ? "Update Transaction" : "Add Transaction"}
+          {editingTransaction ? t("transactions.editTransaction") : t("transactions.addTransaction")}
         </Button>
       </form>
     </Card>

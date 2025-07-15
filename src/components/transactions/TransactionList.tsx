@@ -8,6 +8,7 @@ import { ArrowUp, ArrowDown, Calendar, Search, Filter, Edit2, Trash2 } from 'luc
 import { Transaction } from '@/types/finance';
 import { defaultCategories } from '@/data/defaultCategories';
 import { formatCurrency } from '@/utils/financeCalculations';
+import { useTranslation } from 'react-i18next';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -16,6 +17,7 @@ interface TransactionListProps {
 }
 
 export const TransactionList = ({ transactions, onDeleteTransaction, onEditTransaction }: TransactionListProps) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
@@ -75,9 +77,9 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
   return (
     <Card className="finance-card p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold">Recent Transactions</h3>
+        <h3 className="text-xl font-semibold">{t("transactions.title")}</h3>
         <Badge variant="secondary">
-          {filteredTransactions.length} transactions
+          {filteredTransactions.length} {t("backup.transactions").toLowerCase()}
         </Badge>
       </div>
 
@@ -86,7 +88,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search transactions..."
+            placeholder={t("transactions.title")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -95,21 +97,21 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
 
         <Select value={filterType} onValueChange={(value) => setFilterType(value as 'all' | 'income' | 'expense')}>
           <SelectTrigger>
-            <SelectValue placeholder="Filter by type" />
+            <SelectValue placeholder={t("transactions.type")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="income">Income</SelectItem>
-            <SelectItem value="expense">Expenses</SelectItem>
+            <SelectItem value="all">{t("transactions.type")}</SelectItem>
+            <SelectItem value="income">{t("transactions.income")}</SelectItem>
+            <SelectItem value="expense">{t("transactions.expense")}</SelectItem>
           </SelectContent>
         </Select>
 
         <Select value={filterCategory} onValueChange={setFilterCategory}>
           <SelectTrigger>
-            <SelectValue placeholder="Filter by category" />
+            <SelectValue placeholder={t("transactions.category")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="all">{t("transactions.category")}</SelectItem>
             {defaultCategories.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 <div className="flex items-center gap-2">
@@ -126,23 +128,23 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
 
         <Select value={filterPeriod} onValueChange={(value) => setFilterPeriod(value as 'all' | 'week' | 'month' | 'year')}>
           <SelectTrigger>
-            <SelectValue placeholder="Filter by period" />
+            <SelectValue placeholder={t("transactions.date")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Time</SelectItem>
-            <SelectItem value="week">This Week</SelectItem>
-            <SelectItem value="month">This Month</SelectItem>
-            <SelectItem value="year">This Year</SelectItem>
+            <SelectItem value="all">{t("transactions.date")}</SelectItem>
+            <SelectItem value="week">{t("dashboard.thisMonth")}</SelectItem>
+            <SelectItem value="month">{t("dashboard.thisMonth")}</SelectItem>
+            <SelectItem value="year">{t("dashboard.thisMonth")}</SelectItem>
           </SelectContent>
         </Select>
 
         <Select value={sortBy} onValueChange={(value) => setSortBy(value as 'date' | 'amount')}>
           <SelectTrigger>
-            <SelectValue placeholder="Sort by" />
+            <SelectValue placeholder={t("transactions.date")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="date">Sort by Date</SelectItem>
-            <SelectItem value="amount">Sort by Amount</SelectItem>
+            <SelectItem value="date">{t("transactions.date")}</SelectItem>
+            <SelectItem value="amount">{t("transactions.amount")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -152,7 +154,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
         {filteredTransactions.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <Filter className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No transactions found matching your criteria</p>
+            <p>{t("transactions.noTransactions")}</p>
           </div>
         ) : (
           filteredTransactions.map((transaction) => {
@@ -218,7 +220,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
                     </span>
                     {transaction.isRecurring && (
                       <Badge variant="secondary" className="text-xs">
-                        {transaction.recurringFrequency}
+                        {t(`transactions.${transaction.recurringFrequency}`)}
                       </Badge>
                     )}
                     {transaction.isFixed && (

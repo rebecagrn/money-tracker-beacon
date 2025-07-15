@@ -14,12 +14,14 @@ import { Upload, FileText, AlertCircle } from "lucide-react";
 import { Transaction } from "@/types/finance";
 import { convertToBRL } from "@/utils/currencyService";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface BillImporterProps {
   onImportTransactions: (transactions: Transaction[]) => void;
 }
 
 export const BillImporter = ({ onImportTransactions }: BillImporterProps) => {
+  const { t } = useTranslation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [defaultCategory, setDefaultCategory] = useState("bills");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -114,17 +116,17 @@ export const BillImporter = ({ onImportTransactions }: BillImporterProps) => {
       if (transactions.length > 0) {
         onImportTransactions(transactions);
         toast({
-          title: "Bills Imported Successfully",
-          description: `${transactions.length} transactions imported from CSV.`,
+          title: t("backup.importSuccess"),
+          description: `${transactions.length} ${t("backup.transactions").toLowerCase()}`,
         });
       } else {
-        throw new Error("No valid transactions found in the CSV file");
+        throw new Error(t("backup.invalidFile"));
       }
     } catch (error) {
       toast({
-        title: "Import Error",
+        title: t("backup.importFailed"),
         description:
-          error instanceof Error ? error.message : "Failed to import CSV file",
+          error instanceof Error ? error.message : t("backup.importFailed"),
         variant: "destructive",
       });
     } finally {
@@ -141,8 +143,8 @@ export const BillImporter = ({ onImportTransactions }: BillImporterProps) => {
       processCSVFile(file);
     } else {
       toast({
-        title: "Invalid File",
-        description: "Please select a valid CSV file.",
+        title: t("backup.invalidFile"),
+        description: t("backup.fileHelper"),
         variant: "destructive",
       });
     }
@@ -222,7 +224,7 @@ export const BillImporter = ({ onImportTransactions }: BillImporterProps) => {
     //   </div>
     // </Card>
     <div>
-      <h1>in development</h1>
+      <h1>{t("dashboard.importBills")}</h1>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { TrendingUp, TrendingDown, Calendar, DollarSign } from 'lucide-react';
 import { Transaction } from '@/types/finance';
 import { formatCurrency } from '@/utils/financeCalculations';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface BalanceForecastProps {
   transactions: Transaction[];
@@ -20,6 +21,7 @@ interface ForecastData {
 }
 
 export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecastProps) => {
+  const { t } = useTranslation();
   const [forecastMonths, setForecastMonths] = useState('6');
 
   const calculateForecast = (): ForecastData[] => {
@@ -99,7 +101,7 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
           <div className="w-10 h-10 finance-gradient rounded-xl flex items-center justify-center">
             <TrendingUp className="w-5 h-5 text-white" />
           </div>
-          <h3 className="text-xl font-semibold">Balance Forecast</h3>
+          <h3 className="text-xl font-semibold">{t("dashboard.forecast")}</h3>
         </div>
         
         <Select value={forecastMonths} onValueChange={setForecastMonths}>
@@ -107,9 +109,9 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="3">3 months</SelectItem>
-            <SelectItem value="6">6 months</SelectItem>
-            <SelectItem value="12">12 months</SelectItem>
+            <SelectItem value="3">3 {t("dashboard.thisMonth").toLowerCase()}</SelectItem>
+            <SelectItem value="6">6 {t("dashboard.thisMonth").toLowerCase()}</SelectItem>
+            <SelectItem value="12">12 {t("dashboard.thisMonth").toLowerCase()}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -119,7 +121,7 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
         <Card className="p-4 bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-success" />
-            <span className="text-sm font-medium text-success">Best Month</span>
+            <span className="text-sm font-medium text-success">{t("dashboard.thisMonth")}</span>
           </div>
           <p className="text-lg font-semibold">{formatCurrency(bestMonth.projectedBalance, 'BRL')}</p>
           <p className="text-xs text-muted-foreground">{bestMonth.month}</p>
@@ -128,7 +130,7 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
         <Card className="p-4 bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <div className="flex items-center gap-2 mb-2">
             <TrendingDown className="w-4 h-4 text-warning" />
-            <span className="text-sm font-medium text-warning">Worst Month</span>
+            <span className="text-sm font-medium text-warning">{t("dashboard.thisMonth")}</span>
           </div>
           <p className="text-lg font-semibold">{formatCurrency(worstMonth.projectedBalance, 'BRL')}</p>
           <p className="text-xs text-muted-foreground">{worstMonth.month}</p>
@@ -137,7 +139,7 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
         <Card className="p-4 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <div className="flex items-center gap-2 mb-2">
             <DollarSign className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Current Balance</span>
+            <span className="text-sm font-medium text-primary">{t("dashboard.currentBalance")}</span>
           </div>
           <p className="text-lg font-semibold">{formatCurrency(currentBalance, 'BRL')}</p>
           <p className="text-xs text-muted-foreground">Today</p>
@@ -148,7 +150,7 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
       <div className="space-y-3">
         <h4 className="font-medium flex items-center gap-2">
           <Calendar className="w-4 h-4" />
-          Monthly Projections
+          {t("dashboard.forecast")}
         </h4>
         
         <div className="space-y-2 max-h-64 overflow-y-auto">
@@ -165,8 +167,8 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
                 <div>
                   <p className="font-medium">{data.month}</p>
                   <p className="text-xs text-muted-foreground">
-                    Income: {formatCurrency(data.monthlyIncome, 'BRL')} | 
-                    Expenses: {formatCurrency(data.monthlyExpenses, 'BRL')}
+                    {t("dashboard.income")}: {formatCurrency(data.monthlyIncome, 'BRL')} | 
+                    {t("dashboard.expenses")}: {formatCurrency(data.monthlyExpenses, 'BRL')}
                   </p>
                 </div>
               </div>

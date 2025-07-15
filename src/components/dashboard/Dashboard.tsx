@@ -31,8 +31,10 @@ import {
 import { defaultCategories } from "@/data/defaultCategories";
 import { useToast } from "@/hooks/use-toast";
 import { formatDate } from "@/utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 export const Dashboard = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -85,8 +87,8 @@ export const Dashboard = () => {
       prev.map((t) => (t.id === updatedTransaction.id ? updatedTransaction : t))
     );
     toast({
-      title: "Transaction Updated",
-      description: "The transaction has been successfully updated.",
+      title: t("transactions.edit"),
+      description: t("transactions.save"),
     });
   };
 
@@ -103,16 +105,16 @@ export const Dashboard = () => {
   const importTransactions = (importedTransactions: Transaction[]) => {
     setTransactions((prev) => [...importedTransactions, ...prev]);
     toast({
-      title: "Transactions Imported",
-      description: `${importedTransactions.length} transactions have been added.`,
+      title: t("dashboard.importBills"),
+      description: `${importedTransactions.length} ${t("transactions.title").toLowerCase()}`,
     });
   };
 
   const deleteTransaction = (id: string) => {
     setTransactions((prev) => prev.filter((t) => t.id !== id));
     toast({
-      title: "Transaction Deleted",
-      description: "The transaction has been removed from your records.",
+      title: t("transactions.delete"),
+      description: t("transactions.cancel"),
     });
   };
 
@@ -153,8 +155,8 @@ export const Dashboard = () => {
     a.click();
 
     toast({
-      title: "Data Exported",
-      description: "Your financial data has been exported to CSV.",
+      title: t("backup.exportSuccess"),
+      description: t("backup.exportDesc"),
     });
   };
 
@@ -163,10 +165,10 @@ export const Dashboard = () => {
     return (
       <div className="p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Net Income Calculator</h2>
+          <h2 className="text-2xl font-bold">{t("dashboard.netIncome")}</h2>
           <Button onClick={exportToCsv} variant="outline" className="gap-2">
             <Download className="w-4 h-4" />
-            Export CSV
+            {t("backup.export")}
           </Button>
         </div>
 
@@ -177,10 +179,10 @@ export const Dashboard = () => {
             </div>
             <div>
               <h3 className="text-xl font-semibold">
-                Calculate Your Net Income
+                {t("budget.netIncome")}
               </h3>
               <p className="text-muted-foreground">
-                Enter your gross income and tax rate
+                {t("budget.grossIncome")}
               </p>
             </div>
           </div>
@@ -188,11 +190,11 @@ export const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="text-sm font-medium mb-2 block">
-                Gross Income
+                {t("budget.grossIncome")}
               </label>
               <Input
                 type="number"
-                placeholder="Enter gross income"
+                placeholder={t("budget.grossIncome")}
                 value={grossIncome}
                 onChange={(e) => setGrossIncome(e.target.value)}
                 className="text-lg"
@@ -200,7 +202,7 @@ export const Dashboard = () => {
             </div>
             <div>
               <label className="text-sm font-medium mb-2 block">
-                Tax Rate (%)
+                {t("budget.taxRate")}
               </label>
               <Input
                 type="number"
@@ -235,11 +237,11 @@ export const Dashboard = () => {
     return (
       <div className="p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Spending Analysis</h2>
+          <h2 className="text-2xl font-bold">{t("dashboard.spendingAnalysis")}</h2>
           <div className="flex gap-3">
             <Button onClick={exportToCsv} variant="outline" className="gap-2">
               <Download className="w-4 h-4" />
-              Export CSV
+              {t("backup.export")}
             </Button>
             <div className="flex gap-2">
               <Button
@@ -266,7 +268,7 @@ export const Dashboard = () => {
 
         <SpendingChart
           data={chartData}
-          title="Spending by Category"
+          title={t("dashboard.spendingAnalysis")}
           type={chartType}
           currency={summary.currency}
         />
@@ -290,24 +292,24 @@ export const Dashboard = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-foreground">
-              Welcome back!
+              {t("dashboard.title")}
             </h1>
             <p className="text-muted-foreground">
-              Here's your financial overview for today
+              {t("dashboard.overview")}
             </p>
           </div>
 
           <div className="flex gap-3">
             <Button onClick={exportToCsv} variant="outline" className="gap-2">
               <Download className="w-4 h-4" />
-              Export
+              {t("backup.export")}
             </Button>
             <Button
               onClick={handleAddTransactionClick}
               className="finance-gradient gap-2"
             >
               <Plus className="w-4 h-4" />
-              {showForm ? "Close" : "Add Transaction"}
+              {showForm ? t("common.close") : t("transactions.addTransaction")}
             </Button>
           </div>
         </div>
@@ -322,11 +324,11 @@ export const Dashboard = () => {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
-            <TabsTrigger value="budget">Budget</TabsTrigger>
-            <TabsTrigger value="import">Import Bills</TabsTrigger>
-            <TabsTrigger value="forecast">Forecast</TabsTrigger>
+            <TabsTrigger value="overview">{t("dashboard.overview")}</TabsTrigger>
+            <TabsTrigger value="transactions">{t("dashboard.transactions")}</TabsTrigger>
+            <TabsTrigger value="budget">{t("budget.title")}</TabsTrigger>
+            <TabsTrigger value="import">{t("dashboard.importBills")}</TabsTrigger>
+            <TabsTrigger value="forecast">{t("dashboard.forecast")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -340,13 +342,13 @@ export const Dashboard = () => {
               {/* Recent Transactions Preview */}
               <Card className="finance-card p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Recent Transactions</h3>
+                  <h3 className="text-lg font-semibold">{t("dashboard.transactions")}</h3>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => handleTabChange("transactions")}
                   >
-                    View All
+                    {t("navigation.dashboard")}
                   </Button>
                 </div>
                 <div className="space-y-3">
@@ -377,7 +379,7 @@ export const Dashboard = () => {
                   ))}
                   {transactions.length === 0 && (
                     <p className="text-muted-foreground text-center py-4">
-                      No transactions yet
+                      {t("transactions.noTransactions")}
                     </p>
                   )}
                 </div>
@@ -386,7 +388,7 @@ export const Dashboard = () => {
               {/* Spending Chart */}
               <Card className="finance-card p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Spending Overview</h3>
+                  <h3 className="text-lg font-semibold">{t("dashboard.spendingAnalysis")}</h3>
                   <div className="flex gap-2">
                     <Button
                       variant={chartType === "pie" ? "default" : "outline"}
@@ -445,25 +447,25 @@ export const Dashboard = () => {
             <p className="text-2xl font-bold text-primary">
               {transactions.length}
             </p>
-            <p className="text-sm text-muted-foreground">Total Transactions</p>
+            <p className="text-sm text-muted-foreground">{t("backup.transactions")}</p>
           </Card>
           <Card className="finance-card p-4 text-center hover:scale-105 transition-transform">
             <p className="text-2xl font-bold text-success">
               {transactions.filter((t) => t.type === "income").length}
             </p>
-            <p className="text-sm text-muted-foreground">Income Entries</p>
+            <p className="text-sm text-muted-foreground">{t("dashboard.income")}</p>
           </Card>
           <Card className="finance-card p-4 text-center hover:scale-105 transition-transform">
             <p className="text-2xl font-bold text-warning">
               {transactions.filter((t) => t.type === "expense").length}
             </p>
-            <p className="text-sm text-muted-foreground">Expense Entries</p>
+            <p className="text-sm text-muted-foreground">{t("dashboard.expenses")}</p>
           </Card>
           <Card className="finance-card p-4 text-center hover:scale-105 transition-transform">
             <p className="text-2xl font-bold text-foreground">
               {summary.savingsRate.toFixed(1)}%
             </p>
-            <p className="text-sm text-muted-foreground">Savings Rate</p>
+            <p className="text-sm text-muted-foreground">{t("budget.savings")}</p>
           </Card>
         </div>
       </div>

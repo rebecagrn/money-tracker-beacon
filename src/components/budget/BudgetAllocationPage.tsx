@@ -8,6 +8,7 @@ import { Transaction } from "@/types/finance";
 import { BudgetAllocationOverview } from "./BudgetAllocationOverview";
 import { calculateBudgetAllocation } from "@/utils/budgetAllocation";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface BudgetAllocationPageProps {
   transactions: Transaction[];
@@ -27,6 +28,7 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
   transactions,
   className = "",
 }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("overview");
   const [period, setPeriod] = useState<"monthly" | "yearly">("monthly");
   const { toast } = useToast();
@@ -49,16 +51,16 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-foreground">
-            Budget Allocation
+            {t("budget.title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage your finances using the 50/30/20 rule
+            {t("budget.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="secondary" className="text-sm">
             <DollarSign className="w-3 h-3 mr-1" />
-            Net Income:{" "}
+            {t("budget.netIncome")}:{" "}
             {netIncome.toLocaleString("pt-BR", {
               style: "currency",
               currency: "BRL",
@@ -69,8 +71,8 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
             value={period}
             onChange={(e) => setPeriod(e.target.value as "monthly" | "yearly")}
           >
-            <option value="monthly">This Month</option>
-            <option value="yearly">This Year</option>
+            <option value="monthly">{t("dashboard.thisMonth")}</option>
+            <option value="yearly">{t("dashboard.thisMonth")}</option>
           </select>
         </div>
       </div>
@@ -84,7 +86,7 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
         <TabsList className="grid w-full grid-cols-1">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
-            Overview
+            {t("budget.overview")}
           </TabsTrigger>
         </TabsList>
 
@@ -95,11 +97,10 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
                 <BarChart3 className="w-16 h-16 text-muted-foreground" />
                 <div>
                   <h3 className="text-xl font-semibold mb-2">
-                    No Income Found
+                    {t("dashboard.income")}
                   </h3>
                   <p className="text-muted-foreground mb-4">
-                    Add income transactions to see your budget allocation
-                    overview.
+                    {t("transactions.addTransaction")}
                   </p>
                 </div>
               </div>
@@ -109,7 +110,7 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
           ) : (
             <Card className="p-12 text-center">
               <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
-              <p>Loading budget data...</p>
+              <p>{t("common.loading")}</p>
             </Card>
           )}
         </TabsContent>
@@ -122,7 +123,7 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
             <p className="text-2xl font-bold text-blue-600">
               {budgetData.allocations.filter((a) => a.status === "safe").length}
             </p>
-            <p className="text-sm text-muted-foreground">On Track</p>
+            <p className="text-sm text-muted-foreground">{t("budget.onTrack")}</p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl font-bold text-yellow-600">
@@ -131,19 +132,19 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
                   .length
               }
             </p>
-            <p className="text-sm text-muted-foreground">Warning</p>
+            <p className="text-sm text-muted-foreground">{t("budget.warning")}</p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl font-bold text-red-600">
               {budgetData.allocations.filter((a) => a.status === "over").length}
             </p>
-            <p className="text-sm text-muted-foreground">Over Budget</p>
+            <p className="text-sm text-muted-foreground">{t("budget.overBudget")}</p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl font-bold text-green-600">
               {budgetData.recommendations.length}
             </p>
-            <p className="text-sm text-muted-foreground">Recommendations</p>
+            <p className="text-sm text-muted-foreground">{t("budget.recommendations")}</p>
           </Card>
         </div>
       )}
