@@ -40,7 +40,8 @@
     "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
-    "noTransactions": "No transactions found"
+    "noTransactions": "No transactions found",
+    "debt": "Debt / Payments"
   },
   "goals": {
     "title": "Goals",

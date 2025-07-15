@@ -98,6 +98,14 @@ export const defaultCategories: Category[] = [
     budgetLimit: 100,
     icon: "gift",
   },
+  {
+    id: "debt",
+    name: "Debt / Payments",
+    type: "expense",
+    color: "#b91c1c",
+    budgetLimit: 300,
+    icon: "credit-card",
+  },
 
   // Income Categories
   {

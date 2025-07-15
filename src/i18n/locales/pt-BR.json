@@ -11,8 +11,8 @@
     "balance": "Saldo",
     "income": "Receita",
     "expenses": "Despesas",
-    "thisMonth": "Este Mês",
-    "lastMonth": "Mês Passado",
+    "thisMonth": "Este mês",
+    "lastMonth": "Mês passado",
     "change": "Variação",
     "totalIncome": "Total de Receita",
     "totalExpenses": "Total de Despesas",
@@ -43,7 +43,8 @@
     "save": "Salvar",
     "cancel": "Cancelar",
     "noTransactions": "Nenhuma transação encontrada",
-    "add": "Adicionar"
+    "add": "Adicionar",
+    "debt": "Dívidas / Pagamentos"
   },
   "goals": {
     "title": "Metas",
