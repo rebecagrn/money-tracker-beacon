@@ -91,56 +91,88 @@
   }
 
   .dark {
-    /* Dark theme for financial app */
-    --background: 215 25% 8%;
-    --foreground: 240 10% 95%;
+    /* Enhanced dark theme for financial app - Professional & Modern */
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
     
-    --primary: 210 85% 55%;
-    --primary-foreground: 215 25% 8%;
-    --primary-hover: 210 85% 50%;
+    /* Primary financial brand colors - Brighter for better contrast */
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 84% 4.9%;
+    --primary-hover: 217 91% 55%;
     
-    --success: 145 85% 45%;
-    --success-foreground: 215 25% 8%;
-    --success-light: 145 25% 15%;
+    /* Success/Growth colors for income - Enhanced visibility */
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+    --success-light: 142 25% 12%;
     
-    --warning: 35 85% 60%;
-    --warning-foreground: 215 25% 8%;
-    --warning-light: 35 25% 15%;
+    /* Warning colors for expenses - Better contrast */
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 84% 4.9%;
+    --warning-light: 38 25% 12%;
     
-    --danger: 0 85% 60%;
-    --danger-foreground: 215 25% 8%;
-    --danger-light: 0 25% 15%;
+    /* Danger colors for over-budget - Enhanced visibility */
+    --danger: 0 84% 60%;
+    --danger-foreground: 210 40% 98%;
+    --danger-light: 0 25% 12%;
     
-    --card: 215 25% 10%;
-    --card-foreground: 240 10% 95%;
+    /* Enhanced gradients for dark mode */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(199 89% 48%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(158 64% 52%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(222 84% 4.9%) 0%, hsl(215 25% 12%) 100%);
+    --gradient-dashboard: linear-gradient(180deg, hsl(222 84% 4.9%) 0%, hsl(215 25% 12%) 100%);
     
-    --popover: 215 25% 10%;
-    --popover-foreground: 240 10% 95%;
+    /* Enhanced shadows for dark mode depth */
+    --shadow-card: 0 4px 20px -2px hsl(0 0% 0% / 0.3);
+    --shadow-hover: 0 8px 30px -4px hsl(0 0% 0% / 0.4);
+    --shadow-focus: 0 0 0 3px hsl(217 91% 60% / 0.3);
     
-    --secondary: 215 25% 15%;
-    --secondary-foreground: 240 10% 95%;
+    /* Card system with enhanced dark backgrounds */
+    --card: 215 25% 12%;
+    --card-foreground: 210 40% 98%;
     
-    --muted: 215 25% 15%;
-    --muted-foreground: 240 5% 65%;
+    /* Supporting UI elements - Better contrast */
+    --popover: 215 25% 12%;
+    --popover-foreground: 210 40% 98%;
     
-    --accent: 215 25% 15%;
-    --accent-foreground: 240 10% 95%;
+    --secondary: 215 25% 12%;
+    --secondary-foreground: 210 40% 98%;
     
-    --destructive: 0 85% 60%;
-    --destructive-foreground: 240 10% 95%;
+    --muted: 215 25% 12%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 215 25% 12%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
     
     --border: 215 25% 20%;
-    --input: 215 25% 20%;
-    --ring: 210 85% 55%;
+    --input: 215 25% 12%;
+    --ring: 217 91% 60%;
     
-    --sidebar-background: 215 25% 6%;
-    --sidebar-foreground: 240 10% 95%;
-    --sidebar-primary: 210 85% 55%;
-    --sidebar-primary-foreground: 215 25% 6%;
+    /* Enhanced sidebar styling for dark mode */
+    --sidebar-background: 222 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 222 84% 4.9%;
     --sidebar-accent: 215 25% 12%;
-    --sidebar-accent-foreground: 240 10% 95%;
+    --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 215 25% 20%;
-    --sidebar-ring: 210 85% 55%;
+    --sidebar-ring: 217 91% 60%;
+    
+    /* Enhanced chart colors for dark mode */
+    --chart-1: 217 91% 60%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 280 85% 55%;
+    --chart-5: 199 89% 48%;
+    --chart-6: 15 85% 55%;
+    
+    /* Additional dark mode effects */
+    --glow-primary: 0 0 20px hsl(217 91% 60% / 0.3);
+    --glow-success: 0 0 20px hsl(142 76% 36% / 0.3);
+    --glow-warning: 0 0 20px hsl(38 92% 50% / 0.3);
+    --glow-danger: 0 0 20px hsl(0 84% 60% / 0.3);
   }
 }
 
@@ -150,9 +182,61 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans theme-transition;
     background: hsl(var(--background));
   }
+  
+  /* Enhanced dark mode base styles */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  /* Improved focus styles for dark mode */
+  .dark *:focus-visible {
+    @apply outline-none ring-2 ring-primary/50 ring-offset-2 ring-offset-background;
+  }
+  
+  /* Better scrollbar styling for dark mode */
+  .dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent;
+  }
+  
+  /* Enhanced text contrast for dark mode */
+  .dark .text-muted-foreground {
+    color: hsl(215 20% 75%);
+  }
+  
+  /* Better card contrast in dark mode */
+  .dark .finance-card {
+    @apply bg-card border-border shadow-lg;
+  }
+  
+  /* Enhanced input contrast */
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: hsl(215 20% 65%);
+  }
+  
+  /* Better badge contrast */
+  .dark .badge-secondary {
+    @apply bg-secondary;
+    color: hsl(210 40% 98%);
+  }
+  
+
 }
 
 /* Custom utility classes for the finance app */
@@ -173,12 +257,77 @@
     background: var(--gradient-dashboard);
   }
   
+  /* Enhanced dark mode utilities */
+  .dark-card {
+    @apply bg-card backdrop-blur-sm border border-border;
+  }
+  
+  .dark-glass {
+    @apply bg-background/90 backdrop-blur-md border border-border;
+  }
+  
+  .dark-hover {
+    @apply hover:bg-accent/50 hover:border-accent/50 transition-all duration-200;
+  }
+  
+  .dark-focus {
+    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary/50;
+  }
+  
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out;
   }
   
   .animate-slide-up {
     animation: slideUp 0.3s ease-out;
+  }
+  
+  /* Smooth theme transitions */
+  .theme-transition {
+    @apply transition-colors duration-300 ease-in-out;
+  }
+  
+  /* Enhanced button styles for dark mode */
+  .btn-dark {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover border border-primary/20;
+  }
+  
+  .btn-dark-outline {
+    @apply bg-transparent text-foreground border border-border hover:bg-accent hover:border-accent/50;
+  }
+  
+  /* Glow effects for dark mode */
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+  
+  .glow-success {
+    box-shadow: var(--glow-success);
+  }
+  
+  .glow-warning {
+    box-shadow: var(--glow-warning);
+  }
+  
+  .glow-danger {
+    box-shadow: var(--glow-danger);
+  }
+  
+  /* Enhanced card effects for dark mode */
+  .dark-card-glow {
+    @apply dark-card hover:glow-primary transition-all duration-300;
+  }
+  
+  .dark-card-success {
+    @apply dark-card hover:glow-success transition-all duration-300;
+  }
+  
+  .dark-card-warning {
+    @apply dark-card hover:glow-warning transition-all duration-300;
+  }
+  
+  .dark-card-danger {
+    @apply dark-card hover:glow-danger transition-all duration-300;
   }
 }
 

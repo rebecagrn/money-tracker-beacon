@@ -85,7 +85,9 @@
     "warning": "Atenção",
     "confirm": "Confirmar",
     "close": "Fechar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "darkMode": "Modo Escuro",
+    "lightMode": "Modo Claro"
   },
   "navigation": {
     "dashboard": "Painel",

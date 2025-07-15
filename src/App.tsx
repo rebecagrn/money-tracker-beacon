@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import Index from "./pages/Index";
 import { Goals } from "./pages/Goals";
 import { Backup } from "./pages/Backup";
@@ -41,6 +43,7 @@ const AppContent = () => {
             </div>
             <div className="flex items-center gap-2">
               <LanguageSelector />
+              <ThemeToggle />
               <Button onClick={handleLogout} variant="outline" title="Logout">
                 <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline">Logout</span>
@@ -64,15 +67,17 @@ const AppContent = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthGuard>
-          <AppContent />
-        </AuthGuard>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthGuard>
+            <AppContent />
+          </AuthGuard>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

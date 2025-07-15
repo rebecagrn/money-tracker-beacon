@@ -71,7 +71,9 @@
     "confirm": "Confirm",
     "warning": "Warning",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
   },
   "navigation": {
     "dashboard": "Dashboard",
