@@ -48,7 +48,7 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-xl font-bold text-foreground">
             Budget Allocation
           </h1>
           <p className="text-muted-foreground">
