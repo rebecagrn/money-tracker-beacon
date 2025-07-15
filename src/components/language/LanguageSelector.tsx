@@ -29,7 +29,6 @@ const LanguageSelector = () => {
 
   return (
     <div className="flex items-center gap-1">
-      <Globe className="h-4 w-4 text-muted-foreground" />
       <Select value={i18n.language} onValueChange={handleLanguageChange}>
         <SelectTrigger className="w-[120px] h-8 border-none bg-transparent">
           <SelectValue />

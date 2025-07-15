@@ -106,7 +106,9 @@ export const Dashboard = () => {
     setTransactions((prev) => [...importedTransactions, ...prev]);
     toast({
       title: t("dashboard.importBills"),
-      description: `${importedTransactions.length} ${t("transactions.title").toLowerCase()}`,
+      description: `${importedTransactions.length} ${t(
+        "transactions.title"
+      ).toLowerCase()}`,
     });
   };
 
@@ -178,12 +180,8 @@ export const Dashboard = () => {
               <Calculator className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold">
-                {t("budget.netIncome")}
-              </h3>
-              <p className="text-muted-foreground">
-                {t("budget.grossIncome")}
-              </p>
+              <h3 className="text-xl font-semibold">{t("budget.netIncome")}</h3>
+              <p className="text-muted-foreground">{t("budget.grossIncome")}</p>
             </div>
           </div>
 
@@ -237,7 +235,9 @@ export const Dashboard = () => {
     return (
       <div className="p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">{t("dashboard.spendingAnalysis")}</h2>
+          <h2 className="text-2xl font-bold">
+            {t("dashboard.spendingAnalysis")}
+          </h2>
           <div className="flex gap-3">
             <Button onClick={exportToCsv} variant="outline" className="gap-2">
               <Download className="w-4 h-4" />
@@ -294,16 +294,10 @@ export const Dashboard = () => {
             <h1 className="text-2xl font-bold text-foreground">
               {t("dashboard.title")}
             </h1>
-            <p className="text-muted-foreground">
-              {t("dashboard.overview")}
-            </p>
+            <p className="text-muted-foreground">{t("dashboard.overview")}</p>
           </div>
 
           <div className="flex gap-3">
-            <Button onClick={exportToCsv} variant="outline" className="gap-2">
-              <Download className="w-4 h-4" />
-              {t("backup.export")}
-            </Button>
             <Button
               onClick={handleAddTransactionClick}
               className="finance-gradient gap-2"
@@ -324,11 +318,19 @@ export const Dashboard = () => {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">{t("dashboard.overview")}</TabsTrigger>
-            <TabsTrigger value="transactions">{t("dashboard.transactions")}</TabsTrigger>
+            <TabsTrigger value="overview">
+              {t("dashboard.overview")}
+            </TabsTrigger>
+            <TabsTrigger value="transactions">
+              {t("dashboard.transactions")}
+            </TabsTrigger>
             <TabsTrigger value="budget">{t("budget.title")}</TabsTrigger>
-            <TabsTrigger value="import">{t("dashboard.importBills")}</TabsTrigger>
-            <TabsTrigger value="forecast">{t("dashboard.forecast")}</TabsTrigger>
+            <TabsTrigger value="import">
+              {t("dashboard.importBills")}
+            </TabsTrigger>
+            <TabsTrigger value="forecast">
+              {t("dashboard.forecast")}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -342,7 +344,9 @@ export const Dashboard = () => {
               {/* Recent Transactions Preview */}
               <Card className="finance-card p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">{t("dashboard.transactions")}</h3>
+                  <h3 className="text-lg font-semibold">
+                    {t("dashboard.transactions")}
+                  </h3>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -388,7 +392,9 @@ export const Dashboard = () => {
               {/* Spending Chart */}
               <Card className="finance-card p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">{t("dashboard.spendingAnalysis")}</h3>
+                  <h3 className="text-lg font-semibold">
+                    {t("dashboard.spendingAnalysis")}
+                  </h3>
                   <div className="flex gap-2">
                     <Button
                       variant={chartType === "pie" ? "default" : "outline"}
@@ -447,25 +453,33 @@ export const Dashboard = () => {
             <p className="text-2xl font-bold text-primary">
               {transactions.length}
             </p>
-            <p className="text-sm text-muted-foreground">{t("backup.transactions")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("backup.transactions")}
+            </p>
           </Card>
           <Card className="finance-card p-4 text-center hover:scale-105 transition-transform">
             <p className="text-2xl font-bold text-success">
               {transactions.filter((t) => t.type === "income").length}
             </p>
-            <p className="text-sm text-muted-foreground">{t("dashboard.income")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("dashboard.income")}
+            </p>
           </Card>
           <Card className="finance-card p-4 text-center hover:scale-105 transition-transform">
             <p className="text-2xl font-bold text-warning">
               {transactions.filter((t) => t.type === "expense").length}
             </p>
-            <p className="text-sm text-muted-foreground">{t("dashboard.expenses")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("dashboard.expenses")}
+            </p>
           </Card>
           <Card className="finance-card p-4 text-center hover:scale-105 transition-transform">
             <p className="text-2xl font-bold text-foreground">
               {summary.savingsRate.toFixed(1)}%
             </p>
-            <p className="text-sm text-muted-foreground">{t("budget.savings")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("budget.savings")}
+            </p>
           </Card>
         </div>
       </div>
