@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, DollarSign, Loader2 } from "lucide-react";
 import { Transaction } from "@/types/finance";
@@ -53,9 +52,7 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
           <h1 className="text-xl font-bold text-foreground">
             {t("budget.title")}
           </h1>
-          <p className="text-muted-foreground">
-            {t("budget.subtitle")}
-          </p>
+          <p className="text-muted-foreground">{t("budget.subtitle")}</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="secondary" className="text-sm">
@@ -123,7 +120,9 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
             <p className="text-2xl font-bold text-blue-600">
               {budgetData.allocations.filter((a) => a.status === "safe").length}
             </p>
-            <p className="text-sm text-muted-foreground">{t("budget.onTrack")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("budget.onTrack")}
+            </p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl font-bold text-yellow-600">
@@ -132,19 +131,25 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
                   .length
               }
             </p>
-            <p className="text-sm text-muted-foreground">{t("budget.warning")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("budget.warning")}
+            </p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl font-bold text-red-600">
               {budgetData.allocations.filter((a) => a.status === "over").length}
             </p>
-            <p className="text-sm text-muted-foreground">{t("budget.overBudget")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("budget.overBudget")}
+            </p>
           </Card>
           <Card className="p-4 text-center">
             <p className="text-2xl font-bold text-green-600">
               {budgetData.recommendations.length}
             </p>
-            <p className="text-sm text-muted-foreground">{t("budget.recommendations")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("budget.recommendations")}
+            </p>
           </Card>
         </div>
       )}
