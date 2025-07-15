@@ -23,11 +23,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function AppSidebar() {
   const { t } = useTranslation();
   const location = useLocation();
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
 
   const mainItems = [
     { title: t("navigation.dashboard"), url: "/", icon: Home },
@@ -63,9 +66,6 @@ export function AppSidebar() {
   const searchParams = new URLSearchParams(location.search);
   const currentTab = searchParams.get("tab");
   const currentSection = searchParams.get("section");
-
-  // For now, we'll assume sidebar is not collapsed. Can be enhanced later with state management
-  const collapsed = false;
 
   const isActive = (path: string) => {
     if (path === "/")
