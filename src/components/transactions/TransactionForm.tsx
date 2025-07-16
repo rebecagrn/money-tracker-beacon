@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { DatePicker } from "@/components/ui/date-picker";
 import { ArrowUp, ArrowDown, Plus } from "lucide-react";
 import { Transaction } from "@/types/finance";
 import { defaultCategories } from "@/data/defaultCategories";
@@ -61,6 +62,9 @@ export const TransactionForm = ({
   );
   const [wallet, setWallet] = useState(
     editingTransaction?.wallet || wallets[0]
+  );
+  const [date, setDate] = useState<Date>(
+    editingTransaction?.date ? new Date(editingTransaction.date) : new Date()
   );
   const { toast } = useToast();
 
@@ -113,7 +117,7 @@ export const TransactionForm = ({
       originalAmount,
       category,
       description,
-      date: editingTransaction?.date || new Date().toISOString(),
+      date: date.toISOString(),
       isRecurring,
       recurringFrequency: isRecurring ? recurringFrequency : undefined,
       isFixed,
@@ -135,6 +139,7 @@ export const TransactionForm = ({
     setDescription("");
     setIsRecurring(false);
     setIsFixed(false);
+    setDate(new Date());
 
     toast({
       title: editingTransaction ? "Transaction Updated" : "Transaction Added",
@@ -249,16 +254,30 @@ export const TransactionForm = ({
           </div>
         </div>
 
-        {/* Description */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
-            {t("transactions.description")}
-          </label>
-          <Input
-            placeholder={t("transactions.enterDescription")}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+        <div className="flex flex-row gap-2">
+          {/* Description */}
+          <div className="space-y-2 flex-1">
+            <label className="text-sm font-medium">
+              {t("transactions.description")}
+            </label>
+            <Input
+              placeholder={t("transactions.enterDescription")}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          {/* Date */}
+          <div className="space-y-2 w-48">
+            <label className="text-sm font-medium">
+              {t("transactions.date")}
+            </label>
+            <DatePicker
+              date={date}
+              onDateChange={(newDate) => newDate && setDate(newDate)}
+              placeholder={t("transactions.selectDate")}
+            />
+          </div>
         </div>
 
         {/* Wallet Selection */}

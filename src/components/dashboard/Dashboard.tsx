@@ -65,7 +65,14 @@ export const Dashboard = () => {
   useEffect(() => {
     const savedTransactions = localStorage.getItem("finance-transactions");
     if (savedTransactions) {
-      setTransactions(JSON.parse(savedTransactions));
+      const loadedTransactions = JSON.parse(savedTransactions);
+      
+      // Generate recurring transactions for current month
+      import("@/utils/recurringTransactions").then(({ generateRecurringTransactions }) => {
+        const recurring = generateRecurringTransactions(loadedTransactions);
+        const allTransactions = [...loadedTransactions, ...recurring];
+        setTransactions(allTransactions);
+      });
     }
   }, []);
 
