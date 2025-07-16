@@ -348,11 +348,11 @@ export const Dashboard = () => {
                     {t("dashboard.transactions")}
                   </h3>
                   <Button
-                    variant="ghost"
+                    variant="link"
                     size="sm"
                     onClick={() => handleTabChange("transactions")}
                   >
-                    {t("navigation.dashboard")}
+                    {t("navigation.button")}
                   </Button>
                 </div>
                 <div className="space-y-3">

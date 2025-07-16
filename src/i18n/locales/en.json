@@ -76,6 +76,7 @@
     "lightMode": "Light Mode"
   },
   "navigation": {
+    "button": "See more",
     "dashboard": "Dashboard",
     "goals": "Goals",
     "reports": "Reports",

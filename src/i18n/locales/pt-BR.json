@@ -90,6 +90,7 @@
     "lightMode": "Modo Claro"
   },
   "navigation": {
+    "button": "Ver mais",
     "dashboard": "Painel",
     "goals": "Metas",
     "reports": "Relatórios",
