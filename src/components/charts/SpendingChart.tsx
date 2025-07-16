@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   PieChart,
   Pie,
@@ -13,7 +14,10 @@ import {
 } from "recharts";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TrendingUp, Filter } from 'lucide-react';
 import { formatCurrency } from "@/utils/financeCalculations";
+import { useTranslation } from 'react-i18next';
 
 interface ChartData {
   name: string;
@@ -27,6 +31,8 @@ interface SpendingChartProps {
   title: string;
   type?: "pie" | "bar";
   currency?: string;
+  showPeriodFilter?: boolean;
+  onPeriodChange?: (period: string) => void;
 }
 
 const COLORS = [
@@ -43,13 +49,45 @@ export const SpendingChart = ({
   title,
   type = "pie",
   currency = "USD",
+  showPeriodFilter = false,
+  onPeriodChange
 }: SpendingChartProps) => {
+  const { t } = useTranslation();
+  const [selectedPeriod, setSelectedPeriod] = useState('month');
+
+  const handlePeriodChange = (period: string) => {
+    setSelectedPeriod(period);
+    onPeriodChange?.(period);
+  };
+
+  const totalAmount = data.reduce((sum, item) => sum + item.value, 0);
   if (!data || data.length === 0) {
     return (
       <Card className="finance-card p-6">
-        <h3 className="text-lg font-semibold mb-4">{title}</h3>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 finance-gradient rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-white" />
+            </div>
+            <h3 className="text-lg font-semibold">{title}</h3>
+          </div>
+          {showPeriodFilter && (
+            <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="month">{t("filters.thisMonth")}</SelectItem>
+                <SelectItem value="3months">{t("filters.last3Months")}</SelectItem>
+                <SelectItem value="6months">{t("filters.last6Months")}</SelectItem>
+                <SelectItem value="year">{t("filters.thisYear")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        </div>
         <div className="h-64 flex items-center justify-center text-muted-foreground">
-          No data available
+          <Filter className="w-12 h-12 mb-4 opacity-50" />
+          <p>{t("charts.noData")}</p>
         </div>
       </Card>
     );
@@ -74,7 +112,32 @@ export const SpendingChart = ({
 
   return (
     <Card className="finance-card p-6">
-      <h3 className="text-lg font-semibold mb-4">{title}</h3>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 finance-gradient rounded-xl flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-white" />
+          </div>
+          <h3 className="text-lg font-semibold">{title}</h3>
+        </div>
+        <div className="flex items-center gap-3">
+          <Badge variant="secondary" className="text-sm">
+            {t("charts.total")}: {formatCurrency(totalAmount, currency)}
+          </Badge>
+          {showPeriodFilter && (
+            <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="month">{t("filters.thisMonth")}</SelectItem>
+                <SelectItem value="3months">{t("filters.last3Months")}</SelectItem>
+                <SelectItem value="6months">{t("filters.last6Months")}</SelectItem>
+                <SelectItem value="year">{t("filters.thisYear")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+      </div>
 
       {type === "pie" ? (
         <div className="h-64">

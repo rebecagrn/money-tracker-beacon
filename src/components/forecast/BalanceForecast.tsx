@@ -109,9 +109,9 @@ export const BalanceForecast = ({ transactions, currentBalance }: BalanceForecas
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="3">3 {t("dashboard.thisMonth").toLowerCase()}</SelectItem>
-            <SelectItem value="6">6 {t("dashboard.thisMonth").toLowerCase()}</SelectItem>
-            <SelectItem value="12">12 {t("dashboard.thisMonth").toLowerCase()}</SelectItem>
+            <SelectItem value="3">{t("filters.3months")}</SelectItem>
+            <SelectItem value="6">{t("filters.6months")}</SelectItem>
+            <SelectItem value="12">{t("filters.12months")}</SelectItem>
           </SelectContent>
         </Select>
       </div>

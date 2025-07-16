@@ -47,6 +47,7 @@ export const Dashboard = () => {
   const [editingTransaction, setEditingTransaction] =
     useState<Transaction | null>(null);
   const [chartType, setChartType] = useState<"pie" | "bar">("pie");
+  const [chartPeriod, setChartPeriod] = useState("month");
   const [grossIncome, setGrossIncome] = useState("");
   const [taxRate, setTaxRate] = useState(6);
   const { toast } = useToast();
@@ -122,16 +123,54 @@ export const Dashboard = () => {
 
   const summary = getFinancialSummary(transactions, "monthly");
 
-  // Prepare chart data
-  const chartData = summary.topCategories.map((cat, index) => {
-    const categoryInfo = defaultCategories.find((c) => c.id === cat.category);
-    return {
-      name: categoryInfo?.name || cat.category,
-      value: cat.amount,
-      color: categoryInfo?.color || "#666666",
-      percentage: cat.percentage,
-    };
-  });
+  // Prepare chart data with period filter
+  const chartData = (() => {
+    const now = new Date();
+    let startDate = new Date();
+    
+    // Set start date based on selected period
+    switch (chartPeriod) {
+      case "month":
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      case "3months":
+        startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+        break;
+      case "6months":
+        startDate = new Date(now.getFullYear(), now.getMonth() - 6, 1);
+        break;
+      case "year":
+        startDate = new Date(now.getFullYear(), 0, 1);
+        break;
+      default:
+        startDate = new Date(0); // All time
+    }
+    
+    const filteredTransactions = transactions.filter(t => 
+      t.type === 'expense' && new Date(t.date) >= startDate
+    );
+    
+    const categoryTotals = new Map<string, number>();
+    
+    filteredTransactions.forEach(transaction => {
+      const categoryInfo = defaultCategories.find(c => c.id === transaction.category);
+      const categoryName = categoryInfo?.name || transaction.category;
+      const currentAmount = categoryTotals.get(categoryName) || 0;
+      categoryTotals.set(categoryName, currentAmount + transaction.amount);
+    });
+
+    const total = Array.from(categoryTotals.values()).reduce((sum, amount) => sum + amount, 0);
+    
+    return Array.from(categoryTotals.entries()).map(([name, value]) => {
+      const categoryInfo = defaultCategories.find(c => c.name === name);
+      return {
+        name,
+        value,
+        color: categoryInfo?.color || "#666666",
+        percentage: total > 0 ? (value / total) * 100 : 0
+      };
+    }).sort((a, b) => b.value - a.value);
+  })();
 
   // Calculate net income
   const netIncomeCalc = grossIncome
@@ -415,9 +454,11 @@ export const Dashboard = () => {
 
                 <SpendingChart
                   data={chartData}
-                  title=""
+                  title={t("charts.spendingAnalysis")}
                   type={chartType}
                   currency={summary.currency}
+                  showPeriodFilter={true}
+                  onPeriodChange={setChartPeriod}
                 />
               </Card>
             </div>

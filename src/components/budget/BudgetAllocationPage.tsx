@@ -68,8 +68,8 @@ export const BudgetAllocationPage: React.FC<BudgetAllocationPageProps> = ({
             value={period}
             onChange={(e) => setPeriod(e.target.value as "monthly" | "yearly")}
           >
-            <option value="monthly">{t("dashboard.thisMonth")}</option>
-            <option value="yearly">{t("dashboard.thisMonth")}</option>
+            <option value="monthly">{t("filters.monthly")}</option>
+            <option value="yearly">{t("filters.yearly")}</option>
           </select>
         </div>
       </div>

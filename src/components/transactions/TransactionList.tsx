@@ -88,7 +88,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder={t("transactions.title")}
+            placeholder={t("filters.search")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -100,7 +100,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
             <SelectValue placeholder={t("transactions.type")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("transactions.type")}</SelectItem>
+            <SelectItem value="all">{t("filters.all")}</SelectItem>
             <SelectItem value="income">{t("transactions.income")}</SelectItem>
             <SelectItem value="expense">{t("transactions.expense")}</SelectItem>
           </SelectContent>
@@ -111,7 +111,7 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
             <SelectValue placeholder={t("transactions.category")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("transactions.category")}</SelectItem>
+            <SelectItem value="all">{t("filters.all")}</SelectItem>
             {defaultCategories.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 <div className="flex items-center gap-2">
@@ -128,19 +128,19 @@ export const TransactionList = ({ transactions, onDeleteTransaction, onEditTrans
 
         <Select value={filterPeriod} onValueChange={(value) => setFilterPeriod(value as 'all' | 'week' | 'month' | 'year')}>
           <SelectTrigger>
-            <SelectValue placeholder={t("transactions.date")} />
+            <SelectValue placeholder={t("filters.period")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("transactions.date")}</SelectItem>
-            <SelectItem value="week">{t("dashboard.thisMonth")}</SelectItem>
-            <SelectItem value="month">{t("dashboard.thisMonth")}</SelectItem>
-            <SelectItem value="year">{t("dashboard.thisMonth")}</SelectItem>
+            <SelectItem value="all">{t("filters.allTime")}</SelectItem>
+            <SelectItem value="week">{t("filters.thisWeek")}</SelectItem>
+            <SelectItem value="month">{t("filters.thisMonth")}</SelectItem>
+            <SelectItem value="year">{t("filters.thisYear")}</SelectItem>
           </SelectContent>
         </Select>
 
         <Select value={sortBy} onValueChange={(value) => setSortBy(value as 'date' | 'amount')}>
           <SelectTrigger>
-            <SelectValue placeholder={t("transactions.date")} />
+            <SelectValue placeholder={t("filters.sortBy")} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="date">{t("transactions.date")}</SelectItem>

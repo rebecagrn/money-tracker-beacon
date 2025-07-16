@@ -96,6 +96,35 @@
     "reports": "Relatórios",
     "settings": "Configurações"
   },
+  "filters": {
+    "period": "Período",
+    "allTime": "Todo período",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mês",
+    "thisYear": "Este ano",
+    "last3Months": "Últimos 3 meses",
+    "last6Months": "Últimos 6 meses",
+    "lastYear": "Último ano",
+    "sortBy": "Ordenar por",
+    "filterBy": "Filtrar por",
+    "search": "Pesquisar",
+    "all": "Todos",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "3months": "3 meses",
+    "6months": "6 meses",
+    "12months": "12 meses"
+  },
+  "charts": {
+    "spendingAnalysis": "Análise de Gastos",
+    "monthlyTrend": "Tendência Mensal",
+    "categoryBreakdown": "Distribuição por Categoria",
+    "pieChart": "Gráfico de Pizza",
+    "barChart": "Gráfico de Barras",
+    "noData": "Não há dados para o período selecionado",
+    "total": "Total",
+    "percentage": "Porcentagem"
+  },
   "backup": {
     "title": "Backup de Dados",
     "subtitle": "Exporte e importe seus dados financeiros para backup e transferência",
