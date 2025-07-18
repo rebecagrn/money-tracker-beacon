@@ -17,8 +17,19 @@ import { useTranslation } from "react-i18next";
 import "./i18n";
 import { LogOut } from "lucide-react";
 import { Button } from "./components/ui/button";
+import { isMobileDevice } from "./utils/isMobile";
 
 const queryClient = new QueryClient();
+
+const MobileBlocker = () => (
+  <div className="flex flex-col items-center justify-center h-screen w-screen bg-background text-foreground text-center z-50 fixed top-0 left-0">
+    <p>
+      Sorry, this app is only available on desktop/laptop devices.
+      <br />
+      Please use a larger screen to access all features.
+    </p>
+  </div>
+);
 
 const AppContent = () => {
   const { t } = useTranslation();
@@ -65,20 +76,25 @@ const AppContent = () => {
   );
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthGuard>
-            <AppContent />
-          </AuthGuard>
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  if (isMobileDevice()) {
+    return <MobileBlocker />;
+  }
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthGuard>
+              <AppContent />
+            </AuthGuard>
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
