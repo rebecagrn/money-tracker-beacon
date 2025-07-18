@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import "./i18n";
 import { LogOut } from "lucide-react";
 import { Button } from "./components/ui/button";
-import { isMobileDevice } from "./utils/isMobile";
+import { isMobileDevice } from "./utils/isMobileDevice";
 
 const queryClient = new QueryClient();
 
